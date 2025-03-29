@@ -1,4 +1,4 @@
-import { fetchRSSFeedWithCache } from '@/app/layout'
+import { fetchRSSFeedWithCache, type RSSItem } from '@/app/layout'
 import { Card } from '@/components/card'
 import { LocalTime } from '@/components/local-time'
 import { Lead } from '@/components/text'
@@ -6,7 +6,7 @@ import parse, * as parser from 'html-react-parser'
 import DOMPurify from 'isomorphic-dompurify'
 import type { ReactNode } from 'react'
 
-async function fetchPosts(url: string, cacheKey: string) {
+async function fetchPosts(url: string, cacheKey: string): Promise<RSSItem[]> {
   const feed = await fetchRSSFeedWithCache(cacheKey, url)
   return feed?.items || []
 }
@@ -58,7 +58,7 @@ export async function Snippets(params: {
     </p>
   ) : (
     <ul className="mt-3">
-      {posts.map((post: any, i: number) => (
+      {posts.map((post: RSSItem, i: number) => (
         <Card
           key={i}
           link={
@@ -71,7 +71,7 @@ export async function Snippets(params: {
         >
           <div className="flex flex-col gap-4 sm:flex-row lg:block">
             {/* Image Section */}
-            <div className="w-full sm:mb-4 sm:max-w-64 lg:float-left lg:mb-1 lg:mr-4 lg:w-64">
+            <div className="w-full sm:mb-4 sm:max-w-64 lg:float-left lg:mr-4 lg:mb-1 lg:w-64">
               {TryGetDomWithDataWrapId(
                 post.content,
                 'summary-image',

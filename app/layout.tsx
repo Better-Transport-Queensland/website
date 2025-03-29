@@ -1,26 +1,54 @@
 import '@/styles/tailwind.css'
 import type { Metadata } from 'next'
+import { Fira_Sans } from 'next/font/google'
 import NodeCache from 'node-cache'
 import RSSParser from 'rss-parser'
 
 export const cache = new NodeCache({ stdTTL: 900, checkperiod: 120 }) // 900 seconds = 15 minutes
 
+export type RSSItem = {
+  creator: string
+  title: string
+  link: string
+  pubDate: string
+  'dc:creator': string
+  categories: string[]
+  content: string
+  contentSnippet: string
+  guid: string
+  isoDate: string
+}
+
+export type PaginationLinks = {
+  self: string
+}
+
+export type RSSFeed = {
+  title: string
+  link: string
+  language: string
+  lastBuildDate: string
+  paginationLinks: PaginationLinks
+  self: string
+  items: RSSItem[] // Array of individual RSS feed items
+}
+
 export const fetchRSSFeedWithCache = async (
   cacheKey: string,
   url: string,
-): Promise<any | null> => {
+): Promise<RSSFeed | null> => {
   if (cache.has(cacheKey)) {
     console.log('Cache hit') // Debug: Cache was used
-    return cache.get(cacheKey)
+    return cache.get(cacheKey) ?? null
   } else {
     console.log('Cache miss') // Debug: Cache wasn't used
 
     const parser = new RSSParser()
 
     try {
-      const response = await parser.parseURL(url)
+      const response: unknown = await parser.parseURL(url)
       cache.set(cacheKey, response) // Cache the feed for 15 minutes
-      return response
+      return (response as RSSFeed) ?? null
     } catch (error) {
       console.warn('Failed to fetch RSS feed:', error) // Log the error for debugging
       return null // Gracefully return null in case of an error
@@ -93,24 +121,20 @@ export const createPageMetadata = (params: {
   }
 }
 
+// Configure the Fira Sans font
+const firaSans = Fira_Sans({
+  subsets: ['latin'],
+  weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'], // Include desired font weights
+})
+
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className="scrollbar-gutter-stable">
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link
-          rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossOrigin="anonymous"
-        />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
-          rel="stylesheet"
-        />
-      </head>
-      <body className="bg-[#f1f1f1] font-sans text-gray-950 antialiased">
+      <body
+        className={`bg-[#f1f1f1] ${firaSans.className} text-gray-950 antialiased`}
+      >
         {children}
       </body>
     </html>

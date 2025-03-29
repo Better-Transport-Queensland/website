@@ -1,4 +1,8 @@
-import { createPageMetadata, fetchRSSFeedWithCache } from '@/app/layout'
+import {
+  createPageMetadata,
+  fetchRSSFeedWithCache,
+  type RSSItem,
+} from '@/app/layout'
 import { Button } from '@/components/button'
 import { LocalTime } from '@/components/local-time'
 import { Heading, Lead } from '@/components/text'
@@ -6,18 +10,19 @@ import { ArrowLongLeftIcon } from '@heroicons/react/16/solid'
 import parse, * as parser from 'html-react-parser'
 import DOMPurify from 'isomorphic-dompurify'
 import type { Metadata } from 'next'
+import Link from 'next/link'
 import { notFound } from 'next/navigation'
 
 const getPost = async (
   topicId: string,
   number: string,
-): Promise<any | undefined> => {
+): Promise<RSSItem | undefined> => {
   const url = `${topicId}/${number}`
   const feed = await fetchRSSFeedWithCache(
     url,
     `https://forum.bettertransportqueensland.org/t/${url}.rss`,
   )
-  return (feed?.items ?? [])[0]
+  return feed?.items?.[0] // Return the first RSSItem or undefined
 }
 
 export async function generateMetadataFromTopic(
@@ -127,10 +132,10 @@ export default async function EmbeddedTopic(params: {
           </span>
         )}
       </Lead>
-      <a className="my-4 flex" href="/releases">
+      <Link className="my-4 flex" href="/releases">
         <ArrowLongLeftIcon className="size-5 text-pink-400" /> Go back to Media
         Releases
-      </a>
+      </Link>
       <div>{renderWithTailwind(cleanHtml)}</div>
       <div className="mt-8 rounded-4xl bg-indigo-800 p-12 text-white selection:bg-pink-400 selection:text-indigo-800">
         <Heading as="h2" dark>

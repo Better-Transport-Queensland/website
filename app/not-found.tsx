@@ -13,9 +13,7 @@ export const metadata: Metadata = {
   },
 }
 
-export default function RootLayout({
-  children,
-}: Readonly<{ children: React.ReactNode }>) {
+export default function RootLayout() {
   return (
     <div className="font-sans text-gray-950 antialiased">
       <div className="overflow-hidden">
@@ -27,10 +25,10 @@ export default function RootLayout({
             <main className="grid min-h-full place-items-center px-6 py-24 sm:py-32 lg:px-8">
               <div className="text-center">
                 <p className="text-base font-semibold text-indigo-800">404</p>
-                <h1 className="mt-4 text-balance text-5xl font-semibold tracking-tight text-gray-900 sm:text-7xl">
+                <h1 className="mt-4 text-5xl font-semibold tracking-tight text-balance text-gray-900 sm:text-7xl">
                   Page not found
                 </h1>
-                <p className="mt-6 text-pretty text-lg font-medium text-gray-500 sm:text-xl/8">
+                <p className="mt-6 text-lg font-medium text-pretty text-gray-500 sm:text-xl/8">
                   Sorry, we couldn’t find the page you’re looking for.
                 </p>
                 <div className="mt-10 flex items-center justify-center gap-x-6">

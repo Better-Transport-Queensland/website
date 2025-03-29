@@ -17,6 +17,9 @@ const cacheKey = 'media-feed'
 const feedUrl =
   'https://forum.bettertransportqueensland.org/c/media/media-releases/11.rss'
 
+// Only here to indicate to next.js that this page relies on non-static content
+export const dynamic = 'force-dynamic'
+
 export default function Page() {
   return (
     <main className="flex min-h-screen flex-col overflow-hidden">
@@ -24,7 +27,7 @@ export default function Page() {
         <Navbar />
       </Container>
       <div className="flex-grow">
-        <Container className="mb-16 mt-16">
+        <Container className="mt-16 mb-16">
           <Heading as="h1">Media Releases</Heading>
           <Lead className="mt-6 max-w-3xl">
             Stay up to date with our latest media releases.
