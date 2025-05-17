@@ -14,10 +14,6 @@ export const metadata: Metadata = createPageMetadata({
   slug: 'blog',
 })
 
-const cacheKey = 'blog-feed'
-const feedUrl =
-  'https://forum.bettertransportqueensland.org/c/media/blog/57.rss'
-
 // Only here to indicate to next.js that this page relies on non-static content
 export const dynamic = 'force-dynamic'
 
@@ -33,12 +29,7 @@ export default function Page() {
           <Lead className="mt-6 max-w-3xl">
             See thoughts from the BTQ Community.
           </Lead>
-          <Snippets
-            cacheKey={cacheKey}
-            feedUrl={feedUrl}
-            redirectRoute="blog"
-            showAuthor
-          />
+          <Snippets categoryId={57} redirectRoute="blog" showAuthor />
         </Container>
       </div>
       <Footer />

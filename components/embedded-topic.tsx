@@ -1,11 +1,8 @@
-import {
-  createPageMetadata,
-  fetchRSSFeedWithCache,
-  type RSSItem,
-} from '@/app/layout'
+import { createPageMetadata } from '@/app/layout'
 import { Button } from '@/components/button'
 import { LocalTime } from '@/components/local-time'
 import { Heading, Lead } from '@/components/text'
+import { fetchPostFromCategory } from '@/helpers/discourseTopicHelper'
 import { ArrowLongLeftIcon } from '@heroicons/react/16/solid'
 import parse, * as parser from 'html-react-parser'
 import DOMPurify from 'isomorphic-dompurify'
@@ -13,30 +10,19 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 
-const getPost = async (
-  topicId: string,
-  number: string,
-): Promise<RSSItem | undefined> => {
-  const url = `${topicId}/${number}`
-  const feed = await fetchRSSFeedWithCache(
-    url,
-    `https://forum.bettertransportqueensland.org/t/${url}.rss`,
-  )
-  return feed?.items?.[0] // Return the first RSSItem or undefined
-}
-
 export async function generateMetadataFromTopic(
+  categoryTitle: string,
+  topicTitle: string,
   topicId: string,
-  number: string,
   slug: string,
   description: string,
 ): Promise<Metadata> {
-  const post = await getPost(topicId, number)
+  const post = await fetchPostFromCategory(topicId, categoryTitle)
 
   return createPageMetadata({
     title: post?.title ?? 'Post Not Found',
     description: description,
-    slug: `${slug}/${topicId}/${number}`,
+    slug: `${slug}/${topicTitle}/${topicId}`,
   })
 }
 
@@ -63,7 +49,27 @@ function renderWithTailwind(html: string) {
             break
           case 'img':
             node.attribs.class ||= ''
-            node.attribs.class += ' my-4 rounded-md shadow-md'
+            node.attribs.class += 'w-full object-contain'
+
+            if (node.attribs?.alt) {
+              const aspectRatio =
+                parseFloat(node.attribs.width) / parseFloat(node.attribs.height)
+              const maxWidthClass = aspectRatio < 3 / 2 ? 'w-fit' : 'w-full'
+
+              return (
+                <div className="mx-auto mt-4 w-full">
+                  <div
+                    className={`${maxWidthClass} overflow-hidden rounded-md shadow-md`}
+                  >
+                    {parser.domToReact([node])}
+                  </div>
+                  <p className="mt-2 text-sm text-gray-500">
+                    {node.attribs.alt}
+                  </p>
+                </div>
+              )
+            }
+
             break
           case 'hr':
             node.attribs.class ||= ''
@@ -104,12 +110,13 @@ function renderWithTailwind(html: string) {
 }
 
 export default async function EmbeddedTopic(params: {
+  topicTitle: string
   topicId: string
-  number: string
+  categoryTitle: string
   showAuthor?: boolean
   linkToTopic?: boolean
 }) {
-  const post = await getPost(params.topicId, params.number)
+  const post = await fetchPostFromCategory(params.topicId, params.categoryTitle)
 
   // Ensure proper conditional rendering
   if (!post) {
@@ -122,7 +129,7 @@ export default async function EmbeddedTopic(params: {
   )
 
   return (
-    <section>
+    <section className="mx-auto max-w-256">
       <Heading as="h1">{post.title}</Heading>
       <Lead>
         {post.creator && (
@@ -136,7 +143,7 @@ export default async function EmbeddedTopic(params: {
         <ArrowLongLeftIcon className="size-5 text-pink-400" /> Go back to Media
         Releases
       </Link>
-      <div>{renderWithTailwind(cleanHtml)}</div>
+      <div className="px-12">{renderWithTailwind(cleanHtml)}</div>
       <div className="mt-8 rounded-4xl bg-indigo-800 p-12 text-white selection:bg-pink-400 selection:text-indigo-800">
         <Heading as="h2" dark>
           {params.linkToTopic

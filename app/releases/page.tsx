@@ -13,10 +13,6 @@ export const metadata: Metadata = createPageMetadata({
   slug: 'releases',
 })
 
-const cacheKey = 'media-feed'
-const feedUrl =
-  'https://forum.bettertransportqueensland.org/c/media/media-releases/11.rss'
-
 // Only here to indicate to next.js that this page relies on non-static content
 export const dynamic = 'force-dynamic'
 
@@ -32,11 +28,7 @@ export default function Page() {
           <Lead className="mt-6 max-w-3xl">
             Stay up to date with our latest media releases.
           </Lead>
-          <Snippets
-            cacheKey={cacheKey}
-            feedUrl={feedUrl}
-            redirectRoute="releases"
-          />
+          <Snippets categoryId={11} redirectRoute="releases" />
         </Container>
       </div>
       <Footer />

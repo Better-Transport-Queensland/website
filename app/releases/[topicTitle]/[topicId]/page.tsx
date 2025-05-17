@@ -6,30 +6,41 @@ import { Footer } from '@/components/footer'
 import { Navbar } from '@/components/navbar'
 import type { Metadata } from 'next'
 
-type Params = Promise<{ topicId: string; number: string }>
+type Params = Promise<{ topicTitle: string; topicId: string }>
 const description =
   'Stay informed with the latest official media releases from Better Transport Queensland—covering public, active, and sustainable transport updates fresh from the source!'
+const categoryTitle = 'Media Releases'
 
 export const generateMetadata = async ({
   params: Params,
 }: {
   params: Params
 }): Promise<Metadata> => {
-  const { topicId, number } = await Params
+  const { topicTitle, topicId } = await Params
 
-  return generateMetadataFromTopic(topicId, number, 'releases', description)
+  return generateMetadataFromTopic(
+    categoryTitle,
+    topicTitle,
+    topicId,
+    'releases',
+    description,
+  )
 }
 
 export default async function Page({ params: Params }: { params: Params }) {
-  const { topicId, number } = await Params
+  const { topicTitle, topicId } = await Params
 
   return (
     <main className="overflow-hidden">
       <Container>
         <Navbar />
       </Container>
-      <Container className="mb-16 mt-16">
-        <EmbeddedTopic topicId={topicId} number={number} />
+      <Container className="mt-16 mb-16">
+        <EmbeddedTopic
+          topicTitle={topicTitle}
+          topicId={topicId}
+          categoryTitle={categoryTitle}
+        />
       </Container>
       <Footer />
     </main>

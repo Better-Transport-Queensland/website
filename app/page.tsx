@@ -26,8 +26,8 @@ function Hero() {
           }}
           filled
         />
-        <div className="pb-24 pt-12 sm:pb-32 sm:pt-16 md:pb-48 md:pt-24">
-          <h1 className="font-display text-balance text-4xl/[0.9] font-medium tracking-tight text-gray-200 sm:text-6xl/[0.8] md:text-7xl/[0.8]">
+        <div className="pt-12 pb-24 sm:pt-16 sm:pb-32 md:pt-24 md:pb-48">
+          <h1 className="font-display text-4xl/[0.9] font-medium tracking-tight text-balance text-gray-200 sm:text-6xl/[0.8] md:text-7xl/[0.8]">
             Better Transport Queensland
           </h1>
           <p className="mt-8 max-w-lg text-xl/7 font-medium text-gray-200 sm:text-2xl/8">
@@ -184,7 +184,7 @@ function FeatureSection() {
               <div className="aspect-square overflow-hidden rounded-xl shadow-xl outline-1 -outline-offset-1 outline-black/10">
                 <Image
                   alt=""
-                  src="/group/1.jpg"
+                  src="/group/1.webp"
                   width={500}
                   height={500}
                   className="block size-full object-cover"
@@ -193,7 +193,7 @@ function FeatureSection() {
               <div className="-mt-8 aspect-square overflow-hidden rounded-xl shadow-xl outline-1 -outline-offset-1 outline-black/10 lg:-mt-32">
                 <Image
                   alt=""
-                  src="/group/2.jpg"
+                  src="/group/2.webp"
                   width={500}
                   height={500}
                   className="block size-full object-cover"
@@ -202,7 +202,7 @@ function FeatureSection() {
               <div className="aspect-square overflow-hidden rounded-xl shadow-xl outline-1 -outline-offset-1 outline-black/10">
                 <Image
                   alt=""
-                  src="/group/3.jpg"
+                  src="/group/3.webp"
                   width={500}
                   height={500}
                   className="block size-full object-cover"
@@ -211,7 +211,7 @@ function FeatureSection() {
               <div className="-mt-8 aspect-square overflow-hidden rounded-xl shadow-xl outline-1 -outline-offset-1 outline-black/10 lg:-mt-32">
                 <Image
                   alt=""
-                  src="/group/4.jpg"
+                  src="/group/4.webp"
                   width={500}
                   height={500}
                   className="block size-full object-cover"
@@ -246,7 +246,7 @@ export default function Home() {
     <div className="overflow-hidden">
       <Hero />
       <main>
-        <div className="space-y-32 pb-24 pt-32">
+        <div className="space-y-32 pt-32 pb-24">
           <FeatureSection />
         </div>
       </main>

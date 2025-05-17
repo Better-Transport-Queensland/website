@@ -71,7 +71,7 @@ function Header() {
 function PricingCards() {
   return (
     <div className="relative py-24">
-      <Gradient className="absolute inset-x-2 bottom-0 top-48 rounded-4xl ring-1 ring-inset ring-black/5" />
+      <Gradient className="absolute inset-x-2 top-48 bottom-0 rounded-4xl ring-1 ring-black/5 ring-inset" />
       <Container className="relative">
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
           {tiers.map((tier, tierIndex) => (
@@ -97,7 +97,7 @@ function PricingCard({ tier }: { tier: (typeof tiers)[number] }) {
           <p>per year</p>
         </div>
       </div>
-      <div className="mb-8 mt-8">
+      <div className="mt-8 mb-8">
         <h3 className="text-sm/6 font-medium text-gray-950">Requirements</h3>
         <ul className="mt-3 space-y-3">
           {tier.highlights.map((props, featureIndex) => (
@@ -105,9 +105,9 @@ function PricingCard({ tier }: { tier: (typeof tiers)[number] }) {
           ))}
         </ul>
       </div>
-      <button className="absolute bottom-4 right-4 rounded-xl bg-pink-400 text-xs data-[hover]:bg-pink-600">
+      <button className="absolute right-4 bottom-4 rounded-xl bg-pink-400 text-xs data-[hover]:bg-pink-600">
         <Link href={tier.href} className="inline-block px-4 py-2 text-white">
-          {tier?.buttonText || 'Join now'}
+          {tier?.buttonText || 'Coming soon...'}
         </Link>
       </button>
     </div>
@@ -154,7 +154,7 @@ function FrequentlyAskedQuestions() {
         <Heading as="div" className="mt-2 text-center">
           Your questions answered.
         </Heading>
-        <div className="mx-auto mb-32 mt-16 max-w-xl space-y-12">
+        <div className="mx-auto mt-16 mb-32 max-w-xl space-y-12">
           <dl>
             <dt className="text-sm font-semibold">What is a member?</dt>
             <dd className="mt-4 text-sm/6 text-gray-600">

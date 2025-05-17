@@ -1,13 +1,16 @@
-import { fetchRSSFeedWithCache, type RSSItem } from '@/app/layout'
 import { Card } from '@/components/card'
 import { LocalTime } from '@/components/local-time'
-import { Lead } from '@/components/text'
+import { Subheading } from '@/components/text'
+import {
+  fetchPostsFromCategory,
+  type RSSItem,
+} from '@/helpers/discourseTopicHelper'
 import parse, * as parser from 'html-react-parser'
 import DOMPurify from 'isomorphic-dompurify'
 import type { ReactNode } from 'react'
 
-async function fetchPosts(url: string, cacheKey: string): Promise<RSSItem[]> {
-  const feed = await fetchRSSFeedWithCache(cacheKey, url)
+async function fetchPosts(categoryId: number): Promise<RSSItem[]> {
+  const feed = await fetchPostsFromCategory(categoryId)
   return feed?.items || []
 }
 
@@ -41,12 +44,11 @@ function TryGetDomWithDataWrapId(
 }
 
 export async function Snippets(params: {
-  feedUrl: string
-  cacheKey: string
+  categoryId: number
   redirectRoute: string
   showAuthor?: boolean
 }) {
-  const posts = await fetchPosts(params.feedUrl, params.cacheKey)
+  const posts = await fetchPosts(params.categoryId)
 
   // Remove the last post from the list
   posts.pop()
@@ -100,7 +102,7 @@ export async function Snippets(params: {
 
             {/* Title Section */}
             <div>
-              <Lead>{post.title}</Lead>
+              <Subheading>{post.title}</Subheading>
               <div className="mb-2">
                 {params.showAuthor ? <>@{post.creator} </> : null}
                 {<LocalTime date={new Date(post.pubDate || '')} />}
