@@ -98,11 +98,16 @@ export async function Snippets(params: {
                     )?.[0] ?? ''
                   )
                 },
+              ) ?? (
+                <img
+                  src="banner.png"
+                  className="h-auto w-full rounded-md object-contain shadow-md lg:w-64"
+                />
               )}
             </div>
 
             {/* Title & Summary Section */}
-            <div className="flex flex-col">
+            <div className="flex flex-col self-start">
               <Subheading>{post.title}</Subheading>
               <div className="mb-2">
                 {params.showAuthor ? <>@{post.creator} </> : null}

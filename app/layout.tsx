@@ -79,7 +79,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="scrollbar-gutter-stable">
       <body
-        className={`bg-[#f1f1f1] ${firaSans.className} text-gray-950 antialiased`}
+        className={`bg-[#f9f9f9] ${firaSans.className} text-gray-950 antialiased`}
       >
         {children}
       </body>
