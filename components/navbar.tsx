@@ -22,7 +22,7 @@ function DesktopNav({ filled }: { filled: true | undefined }) {
       {links.map(({ href, label }) => (
         <Link
           href={href}
-          className={`flex h-[2rem] items-center whitespace-nowrap px-4 text-base font-medium transition duration-200 ease-in-out ${filled ? 'bg-indigo-500 text-white data-[hover]:bg-indigo-600' : 'bg-indigo-300/35 text-black data-[hover]:bg-indigo-500/35'} mr-1 rounded-xl`}
+          className={`flex h-[2rem] items-center px-4 text-base font-medium whitespace-nowrap transition duration-200 ease-in-out ${filled ? 'bg-indigo-500 text-white data-[hover]:bg-indigo-600' : 'bg-indigo-300/35 text-black data-[hover]:bg-indigo-500/35'} mr-1 rounded-xl`}
           key={href}
         >
           {label}
@@ -140,7 +140,7 @@ export function Navbar({
             (banner.expiry ? Date.now() < banner.expiry.getTime() : true) && (
               <Link
                 href={banner.href}
-                className="lg:text-md flex items-center gap-1 rounded-2xl bg-indigo-500 py-0.5 pl-4 pr-3 text-xs/5 font-medium text-white transition duration-200 ease-out data-[hover]:bg-indigo-600 md:text-sm/6"
+                className="lg:text-md flex items-center gap-1 rounded-2xl bg-indigo-500 py-0.5 pr-3 pl-4 text-xs/5 font-medium text-white transition duration-200 ease-out data-[hover]:bg-indigo-600 md:text-sm/6"
               >
                 {banner.text}
                 <ChevronRightIcon className="size-4" />

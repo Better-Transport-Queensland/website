@@ -9,7 +9,7 @@ type HeadingProps = {
 
 export function Heading({
   className,
-  as: Element = 'h2',
+  as: Element = 'h1',
   dark = false,
   ...props
 }: HeadingProps) {
@@ -37,7 +37,7 @@ export function Subheading({
       data-dark={dark ? 'true' : undefined}
       className={clsx(
         className,
-        'text-2xl font-medium tracking-tighter text-pretty text-gray-950 data-[dark]:text-white sm:text-3xl',
+        'text-3xl font-medium tracking-tighter text-pretty text-gray-950 data-[dark]:text-white sm:text-4xl',
       )}
     />
   )
@@ -51,7 +51,7 @@ export function Lead({
     <p
       className={clsx(
         className,
-        'text-2xl font-medium text-gray-600 data-[dark]:text-gray-200',
+        'text-xl font-medium text-gray-600 data-[dark]:text-gray-200 sm:text-2xl',
       )}
       {...props}
     />

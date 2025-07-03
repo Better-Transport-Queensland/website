@@ -24,7 +24,7 @@ export default function Page() {
         <Navbar />
       </Container>
       <div className="flex-grow">
-        <Container className="mt-16 mb-16">
+        <Container className="mb-16">
           <Heading as="h1">Blog</Heading>
           <Lead className="mt-6 max-w-3xl">
             See thoughts from the BTQ Community.

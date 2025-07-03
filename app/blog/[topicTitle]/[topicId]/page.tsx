@@ -35,7 +35,7 @@ export default async function Page({ params: Params }: { params: Params }) {
       <Container>
         <Navbar />
       </Container>
-      <Container className="mt-16 mb-16">
+      <Container className="mb-16">
         <EmbeddedTopic
           topicTitle={topicTitle}
           topicId={topicId}

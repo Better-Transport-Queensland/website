@@ -98,6 +98,11 @@ export async function Snippets(params: {
                     )?.[0] ?? ''
                   )
                 },
+              ) ?? (
+                <img
+                  src="banner.png"
+                  className="h-auto w-full rounded-md object-contain shadow-md lg:w-64"
+                />
               )}
             </div>
 

@@ -1,4 +1,6 @@
 import { createPageMetadata } from '@/app/layout'
+import { Accordion } from '@/components/accordian'
+import { Button } from '@/components/button'
 import { Container } from '@/components/container'
 import { Footer } from '@/components/footer'
 import { Gradient } from '@/components/gradient'
@@ -38,7 +40,7 @@ const tiers: Tier[] = [
     highlights: [{ description: 'Create topics, reply, and more!' }],
     requirements: [{ description: 'None!' }],
     buttonText: 'Join the Forum',
-    href: 'https://forum.bettertransportqueensland.org',
+    href: 'https://forum.bettertransportqueensland.org/signup',
   },
   {
     name: 'Concessional' as const,
@@ -142,12 +144,9 @@ function PricingCard({ tier }: { tier: (typeof tiers)[number] }) {
           ))}
         </ul>
       </div>
-      <Link
-        href={tier.href}
-        className="absolute right-4 bottom-4 rounded-xl bg-pink-400 px-4 py-2 text-xs text-white transition hover:bg-pink-600"
-      >
-        {tier?.buttonText || 'Coming soon...'}
-      </Link>
+      <Button className="absolute right-4 bottom-4" size="small">
+        <Link href={tier.href}>{tier?.buttonText || 'Unavailable...'}</Link>
+      </Button>
     </div>
   )
 }
@@ -208,7 +207,86 @@ function PlusIcon(props: React.ComponentPropsWithoutRef<'svg'>) {
 }
 
 function FrequentlyAskedQuestions() {
-  // TODO ACCORDION
+  const faqs = [
+    {
+      question: 'What is a member?',
+      answer:
+        'Members are financially committed users of the forum who would like to contribute to the running, maintenance, and decision making of the organisation.',
+    },
+    {
+      question: 'Am I a member if I sign up to the forum?',
+      answer: (
+        <div className="space-y-2">
+          <p>
+            There is a distinction between a user of the forum and a member of
+            the organisation. Logged-in users are able to view more categories
+            and topics than anonymous users, however they are unable to vote at
+            annual general meetings or be a member of the working or executive
+            committee.
+          </p>
+          <p>
+            Members also receive exclusive access to the <b>Member's Area</b>{' '}
+            and <b>Draft Media Releases</b> categories on the forum.
+          </p>
+        </div>
+      ),
+    },
+    {
+      question: 'Why should I become a member?',
+      answer: (
+        <div className="space-y-2">
+          <p>
+            If you are a frequent user of the forum and believe in the goals and
+            objectives of the organisation, we highly encourage you to become a
+            member. Running the forum is costly, so we rely on paying members to
+            stay up and running.
+          </p>
+          <p>
+            Our members are vital in ensuring we can continue to provide a safe
+            place for interested members of the public to get involved in our
+            mission.
+          </p>
+          <p>
+            To thank members for their support, we provide exclusive access to
+            the <b>Member's Area</b> and <b>Draft Media Releases</b> categories
+            on the forum.
+          </p>
+          <p>
+            Members are also able to vote at annual general meetings and
+            participate in the working and management committee of the
+            organisation. This gives you the opportunity to shape the future of
+            the association.
+          </p>
+        </div>
+      ),
+    },
+    {
+      question: 'How are fees decided?',
+      answer:
+        'Membership fees are carefully considered by the Treasurer to ensure that we are able to keep the forum and organisation up and running.',
+    },
+    {
+      question:
+        "I really want to get involved, but I can't afford the membership!",
+      answer: (
+        <div className="space-y-2">
+          <p>Fees are only waived for extraordinary circumstances.</p>
+          <p>
+            If you have financial hardship, please reach out to the management
+            committee at{' '}
+            <a
+              href="mailto:management@btq.org.au"
+              className="text-pink-500 hover:underline"
+            >
+              management@btq.org.au
+            </a>{' '}
+            to discuss the possibility of having your fees waived.
+          </p>
+        </div>
+      ),
+    },
+  ]
+
   return (
     <Container className="mt-32">
       <section id="faqs" className="scroll-mt-8">
@@ -218,61 +296,19 @@ function FrequentlyAskedQuestions() {
         <Heading as="div" className="mt-2 text-center">
           Your questions answered.
         </Heading>
-        <div className="mx-auto mt-16 mb-32 max-w-xl space-y-12">
-          <dl>
-            <dt className="text-sm font-semibold">What is a member?</dt>
-            <dd className="mt-4 text-sm/6 text-gray-600">
-              Members are financially committed users of the forum who would
-              like to contribute to the running, maintenance, and decision
-              making of the organisation.
-            </dd>
-          </dl>
-          <dl>
-            <dt className="text-sm font-semibold">
-              Am I a member if I sign up to the forum?
-            </dt>
-            <dd className="mt-4 text-sm/6 text-gray-600">
-              There is a distinction between a logged-in user of the forum and a
-              member of the organisation. Logged-in users are able to view more
-              categories and topics than anonymous users, however they are
-              unable to vote at annual general meetings or be a member of the
-              working or executive committee.
-            </dd>
-            <dd className="mt-4 text-sm/6 font-semibold text-gray-600">
-              You do need to be a paid member to access the member-only section
-              of the forum!
-            </dd>
-          </dl>
-          <dl>
-            <dt className="text-sm font-semibold">
-              Why should I become a member?
-            </dt>
-            <dd className="mt-4 text-sm/6 text-gray-600">
-              If you are a frequent user of the forum and believe in the goals
-              and objectives of the organisation, we highly encourage you to
-              become a member. Running the forum is costly, so we rely on paying
-              members to stay up and running. Our members are vital in ensuring
-              we can continue to provide a safe place for interested members of
-              the public to get involved in our mission. Members are also able
-              to vote at annual general meetings and participate in the working
-              and management committee of the organisation. This gives you the
-              opportunity to shape the future of the association.
-            </dd>
-          </dl>
-          <dl>
-            <dt className="text-sm font-semibold">How are fees decided?</dt>
-            <dd className="mt-4 text-sm/6 text-gray-600">
-              Membership fees are carefully considered by the Treasurer to
-              ensure that we are able to keep the forum and organisation up and
-              running.
-            </dd>
-          </dl>
+        <div className="mx-auto mt-16 mb-32 max-w-xl space-y-6">
+          {faqs.map((faq, index) => (
+            <Accordion
+              key={index}
+              question={faq.question}
+              answer={faq.answer}
+            />
+          ))}
         </div>
       </section>
     </Container>
   )
 }
-
 export default function Pricing() {
   return (
     <main className="overflow-hidden">
