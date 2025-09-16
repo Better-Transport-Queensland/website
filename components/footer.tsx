@@ -99,9 +99,9 @@ function Copyright() {
 
 export function Footer({ filled }: { filled?: true }) {
   return (
-    <footer>
-      <div className="p-2">
-        <Container className={`rounded-4xl ${filled ? 'bg-indigo-800' : ''}`}>
+    <footer className="p-2">
+      <div className={`rounded-4xl ${filled ? 'bg-indigo-800' : ''}`}>
+        <Container>
           <div
             className={`flex justify-between py-8 ${filled ? 'text-white' : 'border-t-2 border-black/5 text-black'}`}
           >
