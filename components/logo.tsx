@@ -1,35 +1,32 @@
+import logo_dark from '@/public/btq_wordmark_dark.svg'
+import logo from '@/public/btq_wordmark_light.svg'
 import { clsx } from 'clsx'
-import { motion } from 'framer-motion'
 import Image from 'next/image'
-import logo from '@/public/logo.svg'
-import logo_dark from '@/public/logo_dark.svg'
 
-export function Logo({ className, filled }: { className?: string, filled: true | undefined}) {
+export function Logo({
+  className,
+  filled,
+}: {
+  className?: string
+  filled: true | undefined
+}) {
   return (
-    <motion.div
-      variants={{ idle: {}, active: {} }}
-      initial="idle"
-      whileHover="active"
-      className={clsx(className, 'overflow-visible flex items-center')}
-    >
-      {
-        filled ? (
-          <Image
-            src={logo_dark}
-            alt="Logo"
-            width={150}
-            height={50}
-          />
-        ) : (
-          <Image
-            src={logo}
-            alt="Logo"
-            width={150}
-            height={50}
-          />
-        )
-      }
-
-    </motion.div>
+    <div className={clsx(className, 'flex items-center overflow-visible')}>
+      {filled ? (
+        <Image
+          src={logo_dark}
+          alt="Logo"
+          priority
+          className="h-auto w-44 sm:w-48 lg:w-52"
+        />
+      ) : (
+        <Image
+          src={logo}
+          alt="Logo"
+          priority
+          className="h-auto w-44 sm:w-48 lg:w-52"
+        />
+      )}
+    </div>
   )
 }

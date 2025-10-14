@@ -1,13 +1,11 @@
 import { createPageMetadata } from '@/app/layout'
 import { Button } from '@/components/button'
 import { LocalTime } from '@/components/local-time'
-import { Heading, Lead } from '@/components/text'
+import { Heading, Lead, Subheading } from '@/components/text'
 import { fetchPostFromCategory } from '@/helpers/discourseTopicHelper'
-import { ArrowLongLeftIcon } from '@heroicons/react/16/solid'
 import parse, * as parser from 'html-react-parser'
 import DOMPurify from 'isomorphic-dompurify'
 import type { Metadata } from 'next'
-import Link from 'next/link'
 import { notFound } from 'next/navigation'
 
 export async function generateMetadataFromTopic(
@@ -27,6 +25,8 @@ export async function generateMetadataFromTopic(
 }
 
 function renderWithTailwind(html: string) {
+  let isFirstParagraph = true
+
   return parse(html, {
     replace: (node: parser.DOMNode) => {
       if (node instanceof parser.Element) {
@@ -44,26 +44,59 @@ function renderWithTailwind(html: string) {
             node.attribs.class += ' mb-2 text-xl font-bold'
             break
           case 'p':
+            if (node.childNodes.length == 0) {
+              return null
+            }
+
+            // This will remove the first paragraph only if it is italicised.
+            // This allows media releases and blog posts to have content at
+            // the start which only shows up on the forum.
+            if (
+              isFirstParagraph &&
+              node.children.length == 1 &&
+              node.firstChild instanceof parser.Element
+            ) {
+              isFirstParagraph = false
+
+              const containsEm =
+                (node.firstChild as parser.Element).name === 'em'
+              if (containsEm) {
+                node.children = []
+                return null
+              }
+            }
+            isFirstParagraph = false
             node.attribs.class ||= ''
             node.attribs.class += ' mb-4'
             break
+          case 'em':
+            break
           case 'img':
+            // handle emojis
+            if (
+              node.attribs.src.startsWith(
+                'https://forum.bettertransportqueensland.org/images/emoji',
+              )
+            ) {
+              node.attribs.class =
+                (node.attribs.class || '') + ' inline align-text-bottom ml-0.5'
+              break
+            }
+
+            const aspectRatio =
+              parseFloat(node.attribs.width) / parseFloat(node.attribs.height)
+            const isApproximately16by9 = aspectRatio < 5 / 4
+            // handle other images
             node.attribs.class ||= ''
-            node.attribs.class += 'w-full object-contain'
+            node.attribs.class += `${isApproximately16by9 ? 'w-fit' : 'aspect-[16/9] w-full  object-cover'}`
 
             if (node.attribs?.alt) {
-              const aspectRatio =
-                parseFloat(node.attribs.width) / parseFloat(node.attribs.height)
-              const maxWidthClass = aspectRatio < 3 / 2 ? 'w-fit' : 'w-full'
-
               return (
-                <div className="mx-auto mt-4 w-full">
-                  <div
-                    className={`${maxWidthClass} overflow-hidden rounded-md shadow-md`}
-                  >
+                <div className={`${isApproximately16by9 ? 'w-fit' : 'w-full'}`}>
+                  <div className={`overflow-hidden rounded-md shadow-md`}>
                     {parser.domToReact([node])}
                   </div>
-                  <p className="mt-2 text-sm text-gray-500">
+                  <p className="mt-2 mb-4 text-sm text-gray-500">
                     {node.attribs.alt}
                   </p>
                 </div>
@@ -131,7 +164,7 @@ export default async function EmbeddedTopic(params: {
   return (
     <section className="mx-auto max-w-256">
       <Heading as="h1">{post.title}</Heading>
-      <Lead>
+      <Lead className="pb-5">
         {post.creator && (
           <span className="mb-2">
             {params.showAuthor ? <>@{post.creator} </> : null}
@@ -139,17 +172,13 @@ export default async function EmbeddedTopic(params: {
           </span>
         )}
       </Lead>
-      <Link className="my-4 flex" href="/releases">
-        <ArrowLongLeftIcon className="size-5 text-pink-400" /> Go back to Media
-        Releases
-      </Link>
-      <div className="sm:px-8 lg:px-12">{renderWithTailwind(cleanHtml)}</div>
+      <div>{renderWithTailwind(cleanHtml)}</div>
       <div className="mt-8 rounded-4xl bg-indigo-800 p-12 text-white selection:bg-pink-400 selection:text-indigo-800">
-        <Heading as="h2" dark>
+        <Subheading as="h2" dark className="text-2xl">
           {params.linkToTopic
             ? 'See what others are saying about this post!'
             : 'Join the conversation on the BTQ Forum!'}
-        </Heading>
+        </Subheading>
         <Lead className="mt-6 max-w-3xl" data-dark="true">
           Stay up-to-date with the latest insights directly from the Better
           Transport Queensland (BTQ) Forum. Connect with engaged community
