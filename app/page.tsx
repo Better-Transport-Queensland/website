@@ -36,12 +36,13 @@ function Hero() {
           </p>
           <div className="mt-12 flex flex-col gap-x-6 gap-y-4 sm:flex-row">
             <Button
+              size="large"
               variant="primary"
               href="https://forum.bettertransportqueensland.org"
             >
               Join the Conversation
             </Button>
-            <Button variant="secondary" href="/member">
+            <Button size="large" variant="secondary" href="/member">
               Become a member
             </Button>
           </div>
@@ -127,7 +128,7 @@ function FeatureSection() {
           advocate for public and active transport as well as regional transport
           and freight rail.
         </Lead>
-        <section className="mt-16 grid grid-cols-1 lg:grid-cols-2">
+        <section className="mt-8 grid grid-cols-1 lg:grid-cols-2">
           <div className="space-y-6 lg:mr-6">
             {/* Who are we? */}
             <div className="rounded-lg bg-white p-6 shadow-md">
