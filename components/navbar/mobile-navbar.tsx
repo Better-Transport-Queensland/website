@@ -8,7 +8,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 type MobileNavbarProps = {
   filled: true | undefined
   isOpen: boolean
-  onClick: () => void
+  onClickAction: () => void
 }
 
 const iconVariants = {
@@ -21,14 +21,18 @@ const xVariants = {
   open: { opacity: 1, rotate: 0, scale: 1 },
 }
 
-export function MobileNavbar({ filled, isOpen, onClick }: MobileNavbarProps) {
+export function MobileNavbar({
+  filled,
+  isOpen,
+  onClickAction,
+}: MobileNavbarProps) {
   const color = !filled ? 'text-black' : ''
 
   return (
     <motion.button
       className="relative flex size-12 items-center justify-center self-center rounded-lg hover:bg-black/5 lg:hidden"
       aria-label="Toggle main menu"
-      onClick={onClick}
+      onClick={onClickAction}
       whileTap={{ scale: 0.9 }}
       animate={{ scale: 1 }}
       transition={{ type: 'spring', stiffness: 500, damping: 20 }}
@@ -95,7 +99,7 @@ export function MobileNavbarMenu({
               >
                 {linkIndex == 0 && (
                   <div className="absolute inset-x-0 top-0 translate-y-1/2">
-                    <div className="h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent" />
+                    <div className="h-px bg-linear-to-r from-transparent via-gray-300 to-transparent" />
                   </div>
                 )}
                 <Link href={href} className="text-base font-medium">
@@ -107,7 +111,7 @@ export function MobileNavbarMenu({
                     linkIndex === NavLinks.length - 1 ? 'mt-4' : ''
                   }`}
                 >
-                  <div className="h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent" />
+                  <div className="h-px bg-linear-to-r from-transparent via-gray-300 to-transparent" />
                 </div>
               </motion.div>
             ))}

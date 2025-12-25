@@ -61,7 +61,7 @@ const committeeMembers: CommitteeMember[] = [
   },
   {
     name: '#Metro',
-    role: 'Non-Governing Director' 
+    role: 'Non-Executive Director',
   },
 ]
 

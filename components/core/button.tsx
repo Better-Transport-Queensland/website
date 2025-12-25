@@ -19,8 +19,7 @@ const variants = {
   ),
   outline: clsx(
     'inline-flex items-center justify-center border border-transparent shadow ring-1 ring-black/10',
-    'font-medium whitespace-nowrap text-gray-950',
-    'disabled:bg-transparent disabled:opacity-40 hover:bg-gray-50',
+    'font-medium whitespace-nowrap text-gray-950 hover:bg-gray-50 disabled:opacity-40',
     'transition duration-200 ease-in-out',
   ),
 }

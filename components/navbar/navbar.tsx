@@ -48,7 +48,7 @@ export function Navbar({ filled }: NavbarProps) {
         <MobileNavbar
           filled={filled}
           isOpen={isOpen}
-          onClick={() => setIsOpen((prev: boolean) => !prev)}
+          onClickAction={() => setIsOpen((prev: boolean) => !prev)}
         />
       </header>
       <MobileNavbarMenu filled={filled} isOpen={isOpen} />
