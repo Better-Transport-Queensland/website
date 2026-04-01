@@ -34,7 +34,7 @@ jobs:
       - name: Get PR number
         id: get-pr
         run: |
-          PR_NUMBER=$(echo '${{ toJson(github.event.workflow_run.pull_requests) }}' | jq -r '.[0].number // empty')
+          PR_NUMBER=$(cat pr-number.txt 2>/dev/null | tr -d '[:space:]')
           echo "pr_number=${PR_NUMBER}" >> $GITHUB_OUTPUT
 
       - name: Post PR Comment
