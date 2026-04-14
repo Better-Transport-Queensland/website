@@ -4,13 +4,11 @@ module.exports = {
     './app/**/*.{js,ts,jsx,tsx,mdx}',
     './components/**/*.{js,ts,jsx,tsx,mdx}',
   ],
+  darkMode: 'class',
   theme: {
     extend: {
       fontFamily: {
         sans: ['Fira Sans', 'system-ui', 'sans-serif'],
-      },
-      borderRadius: {
-        '4xl': '2rem',
       },
     },
   },

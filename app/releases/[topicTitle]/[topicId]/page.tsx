@@ -1,6 +1,5 @@
 import { Container } from '@/components/core/container'
-import { Footer } from '@/components/footer/footer'
-import { Navbar } from '@/components/navbar/navbar'
+import { HeroBanner } from '@/components/hero-banner'
 import EmbeddedTopic, {
   generateMetadataFromTopic,
 } from '@/components/topics/embedded-topic'
@@ -32,17 +31,17 @@ export default async function Page({ params: Params }: { params: Params }) {
 
   return (
     <main className="overflow-hidden">
-      <Container>
-        <Navbar />
-      </Container>
-      <Container className="mb-16">
+      <HeroBanner
+        title="Media Releases"
+        lead="Official statements and updates from Better Transport Queensland."
+      />
+      <Container className="mt-12 mb-16">
         <EmbeddedTopic
           topicTitle={topicTitle}
           topicId={topicId}
           categoryTitle={categoryTitle}
         />
       </Container>
-      <Footer />
     </main>
   )
 }

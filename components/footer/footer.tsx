@@ -50,14 +50,14 @@ function SocialIconInstagram(props: React.ComponentPropsWithoutRef<'svg'>) {
   )
 }
 
-function SocialLinks({ filled }: { filled?: true }) {
+function SocialLinks() {
   return (
     <>
       <Link
         href="https://www.facebook.com/profile.php?id=61571105606896"
         target="_blank"
         aria-label="Visit us on Facebook"
-        className={`${filled ? 'text-white data-[hover]:text-white/80' : 'text-black data-[hover]:text-black/80'}`}
+        className="text-white data-hover:text-white/80"
       >
         <SocialIconFacebook className="size-4" />
       </Link>
@@ -65,7 +65,7 @@ function SocialLinks({ filled }: { filled?: true }) {
         href="https://www.instagram.com/bettertransportqueensland"
         target="_blank"
         aria-label="Visit us on Instagram"
-        className={`${filled ? 'text-white data-[hover]:text-white/80' : 'text-black data-[hover]:text-black/80'}`}
+        className="text-white data-hover:text-white/80"
       >
         <SocialIconInstagram className="size-4" />
       </Link>
@@ -73,7 +73,7 @@ function SocialLinks({ filled }: { filled?: true }) {
         href="https://bsky.app/profile/bettertransportqueensland.org"
         target="_blank"
         aria-label="Visit us on Bluesky"
-        className={`${filled ? 'text-white data-[hover]:text-white/80' : 'text-black data-[hover]:text-black/80'}`}
+        className="text-white data-[hover]:text-white/80"
       >
         <SocialIconBluesky className="size-4" />
       </Link>
@@ -81,7 +81,7 @@ function SocialLinks({ filled }: { filled?: true }) {
         href="https://www.linkedin.com/company/better-transport-queensland"
         target="_blank"
         aria-label="Visit us on LinkedIn"
-        className={`${filled ? 'text-white data-[hover]:text-white/80' : 'text-black data-[hover]:text-black/80'}`}
+        className="text-white data-hover:text-white/80"
       >
         <SocialIconLinkedIn className="size-4" />
       </Link>
@@ -91,34 +91,36 @@ function SocialLinks({ filled }: { filled?: true }) {
 
 function Copyright() {
   return (
-    <div className="">
+    <div className="text-sm">
       &copy; {new Date().getFullYear()} Better Transport Queensland Inc.
     </div>
   )
 }
 
-export function Footer({ filled }: { filled?: true }) {
-  return (
-    <footer className="p-2">
-      <div className={`rounded-4xl ${filled ? 'bg-indigo-800' : ''}`}>
-        <Container>
-          <div
-            className={`flex justify-between py-8 ${filled ? 'text-white' : 'border-t-2 border-black/5 text-black'}`}
-          >
-            <div>
-              <div className="py-3">
-                <Copyright />
-              </div>
-            </div>
-            <div className="flex">
-              <div className="flex items-center gap-8 py-3">
-                <SocialLinks filled={filled} />
-              </div>
-            </div>
-          </div>
-        </Container>
-        <div className="z-0" />
+export function Footer({ bare }: { bare?: boolean }) {
+  const content = (
+    <Container>
+      <div className="text-on-brand flex flex-col items-center justify-between gap-4 py-10 sm:flex-row">
+        <Copyright />
+        <div className="flex items-center gap-6">
+          <SocialLinks />
+        </div>
       </div>
+      <div className="text-on-brand border-t border-indigo-200 py-4 text-center text-xs">
+        Better Transport Queensland is an independent community organisation. We
+        are not affiliated with, endorsed by, or connected to the Queensland
+        Government, TransLink, Queensland Rail, or any local council.
+      </div>
+    </Container>
+  )
+
+  if (bare) {
+    return <footer>{content}</footer>
+  }
+
+  return (
+    <footer className="justify-bottom">
+      <div className="bg-brand-gradient">{content}</div>
     </footer>
   )
 }
