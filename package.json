@@ -13,7 +13,7 @@
     "@headlessui/react": "^2.2.9",
     "@heroicons/react": "^2.2.0",
     "@sanity/image-url": "^2.0.2",
-    "@sanity/vision": "^4.20.3",
+    "@sanity/vision": "^4.22.0",
     "@tailwindcss/postcss": "^4.0.17",
     "clsx": "^2.1.1",
     "dayjs": "^1.11.19",
