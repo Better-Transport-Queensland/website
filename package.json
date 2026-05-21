@@ -29,7 +29,7 @@
     "react-dom": "^19.2.1",
     "react-use-measure": "^2.1.7",
     "rss-parser": "^3.13.0",
-    "sanity": "^4.20.3",
+    "sanity": "^4.22.0",
     "xml2js": "^0.6.2"
   },
   "devDependencies": {
