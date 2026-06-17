@@ -500,9 +500,13 @@ dialog.map-modal::backdrop {
     color: var(--nav-text);
     @apply transition-colors duration-200;
 
-    &:hover {
-      background-color: var(--nav-hover-bg);
-      color: var(--nav-hover-text);
+    /* Only apply hover on devices that truly hover, so the highlight does
+       not "stick" after a tap on touchscreens. */
+    @media (hover: hover) {
+      &:hover {
+        background-color: var(--nav-hover-bg);
+        color: var(--nav-hover-text);
+      }
     }
   }
 
@@ -523,9 +527,11 @@ dialog.map-modal::backdrop {
     color: var(--nav-text);
     @apply transition-colors duration-200;
 
-    &:hover {
-      background-color: var(--nav-hover-bg);
-      color: var(--nav-hover-text);
+    @media (hover: hover) {
+      &:hover {
+        background-color: var(--nav-hover-bg);
+        color: var(--nav-hover-text);
+      }
     }
   }
 

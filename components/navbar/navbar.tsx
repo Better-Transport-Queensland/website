@@ -5,7 +5,7 @@ import { Logo } from '@/components/core/logo'
 import { DesktopNavbar } from '@/components/navbar/desktop-navbar'
 import {
   MobileNavbar,
-  MobileNavbarMenu,
+  MobileNavDrawer,
 } from '@/components/navbar/mobile-navbar'
 import { ThemeSwitcher } from '@/components/theme-switcher'
 import { NextEvent } from '@/data/upcoming-event'
@@ -47,7 +47,10 @@ export function Navbar({ filled }: NavbarProps) {
         </div>
         <div className="flex items-center gap-2">
           <DesktopNavbar filled={filled} />
-          <ThemeSwitcher filled={filled} />
+          {/* Theme toggle lives in the drawer on mobile; only show it here on desktop */}
+          <span className="hidden lg:block">
+            <ThemeSwitcher filled={filled} />
+          </span>
           <MobileNavbar
             filled={filled}
             isOpen={isOpen}
@@ -55,7 +58,7 @@ export function Navbar({ filled }: NavbarProps) {
           />
         </div>
       </header>
-      <MobileNavbarMenu filled={filled} isOpen={isOpen} />
+      <MobileNavDrawer isOpen={isOpen} onClose={() => setIsOpen(false)} />
     </Disclosure>
   )
 }

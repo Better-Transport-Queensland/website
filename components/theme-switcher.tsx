@@ -57,7 +57,7 @@ export function ThemeSwitcher({ filled }: { filled?: true }) {
             initial={{ rotate: -90, opacity: 0 }}
             animate={{ rotate: 0, opacity: 1 }}
             exit={{ rotate: 90, opacity: 0 }}
-            transition={{ duration: 0.3, ease: 'easeInOut' }}
+            transition={{ duration: 0.2, ease: 'easeOut' }}
           >
             <path
               strokeLinecap="round"
