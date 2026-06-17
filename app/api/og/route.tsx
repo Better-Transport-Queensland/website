@@ -15,7 +15,18 @@ export async function GET(request: NextRequest) {
   const title = searchParams.get('title') ?? 'Better Transport Queensland'
   const date = searchParams.get('date') ?? ''
   const category = searchParams.get('category') ?? 'Media Release'
-  const image = searchParams.get('image') ?? ''
+  const imageParam = searchParams.get('image') ?? ''
+  const image = (() => {
+    if (!imageParam) return ''
+    try {
+      const parsed = new URL(imageParam)
+      return parsed.protocol === 'http:' || parsed.protocol === 'https:'
+        ? parsed.toString()
+        : ''
+    } catch {
+      return ''
+    }
+  })()
 
   const logoSrc = await logoPromise
   return new ImageResponse(

@@ -138,13 +138,20 @@ function sanitize(input: string, allowNewlines = false): string {
 
   // validator.stripLow removes control chars (< 0x20 and 0x7F); the second arg
   // keeps newlines for multi-line fields.
-  return validator
-    .trim(
-      validator
-        .stripLow(normalized, allowNewlines)
-        .replace(/<[^>]*>/g, '') // Remove all HTML tags (<script>, <iframe>, ...)
-        .replace(/&[^;]+;/g, ''), // Remove HTML entities
-    )
+  let current = validator.stripLow(normalized, allowNewlines)
+
+  // Strip HTML tags/entities repeatedly until stable. A single pass is an
+  // incomplete multi-character sanitisation: removing one tag can reveal a new
+  // one (e.g. "<scr<script>ipt>" -> "<script>"), so loop until nothing changes.
+  let previous: string
+  do {
+    previous = current
+    current = current
+      .replace(/<[^>]*>/g, '') // Remove HTML tags (<script>, <iframe>, ...)
+      .replace(/&[^;]+;/g, '') // Remove HTML entities
+  } while (current !== previous)
+
+  return validator.trim(current)
 }
 
 function sanitizeFormData(formData: ContactFormData): SanitizedContactFormData {
