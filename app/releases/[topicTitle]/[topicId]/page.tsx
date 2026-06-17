@@ -7,7 +7,7 @@ import type { Metadata } from 'next'
 
 type Params = Promise<{ topicTitle: string; topicId: string }>
 const description =
-  'Stay informed with the latest official media releases from Better Transport Queensland—covering public, active, and sustainable transport updates fresh from the source!'
+  'Stay informed with the latest official media releases from Better Transport Queensland, covering public, active, and sustainable transport updates fresh from the source!'
 const categoryTitle = 'Media Releases'
 
 export const generateMetadata = async ({

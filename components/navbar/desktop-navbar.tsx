@@ -2,6 +2,7 @@
 
 import { NavItems, isNavGroup } from '@/data/nav-links'
 import { ChevronDownIcon } from '@heroicons/react/16/solid'
+import { AnimatePresence, motion } from 'framer-motion'
 import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
 
@@ -38,20 +39,28 @@ function DropdownMenu({
           className={`size-4 transition-transform duration-200 ${open ? 'rotate-180' : ''}`}
         />
       </button>
-      {open && (
-        <div className="nav-dropdown-panel absolute right-0 z-50 mt-2 min-w-48 overflow-hidden">
-          {links.map(({ href, label: linkLabel }) => (
-            <Link
-              key={href}
-              href={href}
-              onClick={() => setOpen(false)}
-              className="nav-dropdown-item block px-4 py-2.5 text-sm font-medium transition-colors"
-            >
-              {linkLabel}
-            </Link>
-          ))}
-        </div>
-      )}
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            className="nav-dropdown-panel absolute right-0 z-50 mt-2 min-w-48 overflow-hidden"
+            initial={{ opacity: 0, y: -6, scale: 0.97 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -6, scale: 0.97 }}
+            transition={{ duration: 0.12, ease: 'easeOut' }}
+          >
+            {links.map(({ href, label: linkLabel }) => (
+              <Link
+                key={href}
+                href={href}
+                onClick={() => setOpen(false)}
+                className="nav-dropdown-item block px-4 py-2.5 text-sm font-medium transition-colors"
+              >
+                {linkLabel}
+              </Link>
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   )
 }

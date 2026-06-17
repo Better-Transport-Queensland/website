@@ -3,6 +3,7 @@ import { Card } from '@/components/core/card'
 import { Container } from '@/components/core/container'
 import { Lead, Subheading } from '@/components/core/text'
 import { HeroBanner } from '@/components/hero-banner'
+import { requireBeta } from '@/lib/beta'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = createPageMetadata({
@@ -79,7 +80,7 @@ const buses: Vehicle[] = [
     name: 'Standard Rigid Bus',
     type: '12.5m Low-Floor',
     introduced: 'Various',
-    status: 'Active — largest fleet segment',
+    status: 'Active, largest fleet segment',
     details: [
       'Manufacturers include Volvo, Scania, and BCI',
       'Low-floor design for wheelchair and pram accessibility',
@@ -118,7 +119,7 @@ const ferries: Vehicle[] = [
     name: 'CityCat',
     type: 'High-Speed Catamaran',
     introduced: '1996–present',
-    status: 'Active — flagship ferry service',
+    status: 'Active, flagship ferry service',
     details: [
       'Capacity of approximately 162 passengers',
       'Operates on the Brisbane River from UQ to Northshore Hamilton',
@@ -381,6 +382,7 @@ function KeyLines() {
 /*  Page                                                               */
 /* ------------------------------------------------------------------ */
 export default function FleetPage() {
+  requireBeta()
   return (
     <main className="overflow-hidden">
       <HeroBanner
@@ -425,7 +427,7 @@ export default function FleetPage() {
         <FleetSection
           label="Light Rail"
           title="Gold Coast Light Rail"
-          description="The G:link — Queensland's first modern light rail system — connects the Gold Coast's key destinations."
+          description="The G:link, Queensland's first modern light rail system, connects the Gold Coast's key destinations."
           vehicles={lightRail}
           image={{
             src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Glink-07.jpg/960px-Glink-07.jpg',

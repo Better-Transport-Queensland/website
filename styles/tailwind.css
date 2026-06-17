@@ -189,7 +189,11 @@
   --text-error: var(--color-red-600);
 }
 
-.dark {
+/* The brand gradient is always dark, so anything on it (buttons, etc.)
+   renders in dark mode — both the design tokens below and the `dark:`
+   variant (see @custom-variant dark) treat its subtree as dark. */
+.dark,
+.bg-brand-gradient {
   --color-background: var(--color-gray-1000);
 
   /* Brand */
@@ -315,7 +319,7 @@ dialog.map-modal::backdrop {
   color: rgb(255 255 255) !important;
 }
 
-@custom-variant dark (&:is(.dark *));
+@custom-variant dark (&:is(.dark *, .bg-brand-gradient *));
 
 .maplibregl-popup-content {
   background: #1e293b !important;

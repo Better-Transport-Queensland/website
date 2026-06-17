@@ -54,7 +54,7 @@ const committeeMembers: CommitteeMember[] = [
     email: 'treasurer@btq.org.au',
   },
   {
-    name: 'Tristan Duncombe',
+    name: 'Mira Alford',
     role: 'Web Master',
     email: 'webmaster@btq.org.au',
   },
@@ -77,24 +77,37 @@ const committeeMembers: CommitteeMember[] = [
   },
 ]
 
+function ImportantNotice() {
+  return (
+    <div className="rounded-xl border border-amber-300 bg-amber-50 p-4 text-amber-900 dark:border-amber-700/70 dark:bg-amber-950/30 dark:text-amber-200">
+      <p className="text-sm font-semibold tracking-wide uppercase">
+        Important Notice
+      </p>
+      <p className="mt-2 text-sm leading-relaxed">
+        Better Transport Queensland Inc. is an independent community
+        organisation. We are <strong>not</strong> the Queensland Government,
+        TransLink, Queensland Rail, or any local council, and we cannot process
+        official complaints, fines, or service requests.
+      </p>
+      <p className="mt-2 text-sm leading-relaxed">
+        For government transport services, please contact{' '}
+        <a
+          href="https://translink.com.au/contact-us"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="font-medium underline"
+        >
+          TransLink directly
+        </a>
+        .
+      </p>
+    </div>
+  )
+}
+
 function GeneralContacts() {
   return (
     <section>
-      <div className="mb-8 rounded-xl border border-amber-300 bg-amber-50 p-4 text-amber-900 dark:border-amber-700/70 dark:bg-amber-950/30 dark:text-amber-200">
-        <p className="text-sm font-semibold tracking-wide uppercase">
-          Important Notice
-        </p>
-        <p className="mt-2 text-sm leading-relaxed">
-          Better Transport Queensland is an independent community organisation.
-          We are <strong>not</strong> the Queensland Government, TransLink,
-          Queensland Rail, or any local council, and we cannot process official
-          complaints, fines, or service requests.
-        </p>
-        <p className="mt-2 text-sm leading-relaxed">
-          For government transport services, please contact the relevant agency
-          directly.
-        </p>
-      </div>
       <Heading as="h2">Get in touch</Heading>
       <p className="text-body mt-4 max-w-3xl">
         We&apos;re always happy to take part in interviews on any topic relating
@@ -216,7 +229,10 @@ function ContactFormSection() {
 function Contacts() {
   return (
     <Container className="space-y-24">
-      <ContactFormSection />
+      <div className="space-y-8">
+        <ImportantNotice />
+        <ContactFormSection />
+      </div>
       <GeneralContacts />
       <ManagementCommittee />
     </Container>

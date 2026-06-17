@@ -387,7 +387,7 @@ export function TransportMap({
             const description =
               props?.description ??
               (props?.longName
-                ? `Route ${props?.shortName ?? ''} — ${props.longName}`
+                ? `Route ${props?.shortName ?? ''}: ${props.longName}`
                 : '')
             setSelectedFeature({
               name,

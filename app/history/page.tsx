@@ -2,12 +2,13 @@ import { createPageMetadata } from '@/app/layout'
 import { Container } from '@/components/core/container'
 import { Heading, Lead, Subheading } from '@/components/core/text'
 import { HeroBanner } from '@/components/hero-banner'
+import { requireBeta } from '@/lib/beta'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = createPageMetadata({
   title: 'Queensland Transport History',
   description:
-    'From horse-drawn trams to electric rail — explore the fascinating history of public transport in Queensland and the networks we lost along the way.',
+    'From horse-drawn trams to electric rail. Explore the fascinating history of public transport in Queensland and the networks we lost along the way.',
   slug: 'history',
 })
 
@@ -40,7 +41,7 @@ const timeline: TimelineEntry[] = [
   {
     year: '1930s',
     title: 'The Golden Age of Trams',
-    body: "Brisbane's tram network reaches its peak with over 300 trams carrying tens of millions of passengers a year. Trams are the backbone of the city — fast, frequent, and reliable.",
+    body: "Brisbane's tram network reaches its peak with over 300 trams carrying tens of millions of passengers a year. Trams are the backbone of the city: fast, frequent, and reliable.",
     highlight: true,
   },
   {
@@ -51,7 +52,7 @@ const timeline: TimelineEntry[] = [
   {
     year: '1969',
     title: 'The Last Tram Runs',
-    body: "Brisbane's final tram makes its last journey on 13 April 1969. The entire network is ripped up in favour of buses and cars — a decision many now regard as one of the city's greatest planning mistakes.",
+    body: "Brisbane's final tram makes its last journey on 13 April 1969. The entire network is ripped up in favour of buses and cars, a decision many now regard as one of the city's greatest planning mistakes.",
     highlight: true,
   },
   {
@@ -77,7 +78,7 @@ const timeline: TimelineEntry[] = [
   {
     year: '2016',
     title: 'New Generation Rollingstock',
-    body: "The NGR trains enter service on the SEQ network — Queensland's first new suburban trains in over a decade, though not without controversy over accessibility issues.",
+    body: "The NGR trains enter service on the SEQ network, Queensland's first new suburban trains in over a decade, though not without controversy over accessibility issues.",
   },
   {
     year: '2024',
@@ -223,7 +224,7 @@ function TramLegacy() {
                 Brisbane&apos;s trams are a reminder:
               </strong>{' '}
               once you tear out public transport infrastructure, getting it back
-              is phenomenally expensive. The lesson for today is clear — protect
+              is phenomenally expensive. The lesson for today is clear: protect
               and invest in the networks we have.
             </p>
           </div>
@@ -260,11 +261,12 @@ function LookingForward() {
 /*  Page                                                               */
 /* ------------------------------------------------------------------ */
 export default function HistoryPage() {
+  requireBeta()
   return (
     <main className="overflow-hidden">
       <HeroBanner
         title="Queensland Transport History"
-        lead="From horse-drawn trams to Cross River Rail — the story of public transport in Queensland is one of ambition, loss, and renewal."
+        lead="From horse-drawn trams to Cross River Rail: the story of public transport in Queensland is one of ambition, loss, and renewal."
       />
 
       <div className="space-y-20 py-20 sm:space-y-28 sm:py-28">

@@ -293,7 +293,7 @@ export default async function EmbeddedTopic(params: {
         <Lead className="mt-4 max-w-3xl text-on-brand">
           Stay up-to-date with the latest insights directly from the Better
           Transport Queensland (BTQ) Forum. Connect with engaged community
-          members, share your thoughts, and be part of the conversation—everyone
+          members, share your thoughts, and be part of the conversation. Everyone
           is welcome!
         </Lead>
         <Button

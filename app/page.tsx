@@ -1,4 +1,5 @@
 import { createPageMetadata } from '@/app/layout'
+import { BetaOnly } from '@/components/beta-only'
 import { Button } from '@/components/core/button'
 import { Card } from '@/components/core/card'
 import { Container } from '@/components/core/container'
@@ -37,7 +38,7 @@ function Hero() {
           <h1 className="animate-fade-in-up font-display max-w-4xl text-5xl/[0.9] font-bold tracking-tight text-balance text-white sm:text-6xl/[0.85] md:text-7xl/[0.85]">
             Better Transport Queensland
           </h1>
-          <p className="animate-fade-in-up animation-delay-150 mt-8 max-w-xl text-lg/7 font-medium text-on-brand sm:text-xl/8">
+          <p className="animate-fade-in-up animation-delay-150 text-on-brand mt-8 max-w-xl text-lg/7 font-medium sm:text-xl/8">
             Queensland&apos;s leading advocacy group for public, active, and
             freight transport. We champion research-driven investment in
             world-class transport systems.
@@ -75,7 +76,7 @@ function PolicyPlatform() {
           </Heading>
           <Lead className="mt-6 max-w-2xl">
             Our strategic vision for a safer, more accessible, and
-            better-integrated transport system across Queensland — covering
+            better-integrated transport system across Queensland, covering
             public, active, and freight transport priorities.
           </Lead>
           <Button className="mt-8" variant="primary" href="/policy-platform">
@@ -119,7 +120,7 @@ const pillars = [
       </svg>
     ),
     title: 'Public Transport',
-    body: 'World-class mass transit systems that connect people to where they live, work, and thrive — reducing congestion without widening freeways.',
+    body: 'World-class mass transit systems that connect people to where they live, work, and thrive, reducing congestion without widening freeways.',
   },
   {
     icon: (
@@ -162,7 +163,7 @@ const pillars = [
       </svg>
     ),
     title: 'Freight Rail',
-    body: 'Shifting heavy freight from road to rail — more efficient, less damaging to roads, and drastically better for the environment.',
+    body: 'Shifting heavy freight from road to rail: more efficient, less damaging to roads, and drastically better for the environment.',
   },
   {
     icon: (
@@ -181,7 +182,7 @@ const pillars = [
       </svg>
     ),
     title: 'Accessibility',
-    body: 'Transport that works for everyone — regardless of age, ability, or income — fostering inclusivity and stronger communities.',
+    body: 'Transport that works for everyone, regardless of age, ability, or income, fostering inclusivity and stronger communities.',
   },
 ]
 
@@ -196,20 +197,15 @@ function Pillars() {
           </Heading>
           <Lead className="mx-auto mt-4 max-w-2xl">
             We believe Queensland&apos;s future starts with research-driven
-            investment in cutting-edge transport — not more lanes on freeways.
+            investment in cutting-edge transport, not more lanes on freeways.
           </Lead>
         </div>
 
         <div className="mt-16 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {pillars.map((p) => (
-            <Card
-              key={p.title}
-              className="p-8 hover:-translate-y-0.5"
-            >
+            <Card key={p.title} className="p-8 hover:-translate-y-0.5">
               <span className="text-accent">{p.icon}</span>
-              <h3 className="heading-3 mt-4">
-                {p.title}
-              </h3>
+              <h3 className="heading-3 mt-4">{p.title}</h3>
               <p className="text-body mt-2 text-sm/6">{p.body}</p>
             </Card>
           ))}
@@ -254,7 +250,7 @@ function CommunitySection() {
           </Subheading>
           <Lead className="mt-6 max-w-xl">
             Connect with engaged community members, share your thoughts, and be
-            part of the movement. Everyone is welcome — from transport
+            part of the movement. Everyone is welcome, from transport
             enthusiasts to everyday commuters.
           </Lead>
           <Button
@@ -279,9 +275,9 @@ function MapCTA() {
       <Heading as="h2" dark>
         Explore Our Transport Map
       </Heading>
-      <p className="mx-auto mt-4 max-w-xl text-lg/7 text-on-brand">
-        See every rail line, bus route, and ferry — plus our proposed
-        improvements — on an interactive map of South East Queensland.
+      <p className="text-on-brand mx-auto mt-4 max-w-xl text-lg/7">
+        See every rail line, bus route, and ferry, plus our proposed
+        improvements, on an interactive map of South East Queensland.
       </p>
       <Button className="mt-10" size="large" variant="primary" href="/map">
         Open the Map
@@ -317,7 +313,9 @@ export default function Home() {
           </div>
         </main>
         <div className="bg-brand-gradient">
-          <MapCTA />
+          <BetaOnly>
+            <MapCTA />
+          </BetaOnly>
           <Footer bare />
         </div>
       </div>

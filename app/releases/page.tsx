@@ -10,7 +10,7 @@ import type { Metadata } from 'next'
 export const metadata: Metadata = createPageMetadata({
   title: 'Media Releases',
   description:
-    'Stay informed with the latest official media releases from Better Transport Queensland—covering public, active, and sustainable transport updates fresh from the source!',
+    'Stay informed with the latest official media releases from Better Transport Queensland, covering public, active, and sustainable transport updates fresh from the source!',
   slug: 'releases',
 })
 

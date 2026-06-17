@@ -3,12 +3,13 @@ import { Card } from '@/components/core/card'
 import { Container } from '@/components/core/container'
 import { Heading, Lead, Subheading } from '@/components/core/text'
 import { HeroBanner } from '@/components/hero-banner'
+import { requireBeta } from '@/lib/beta'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = createPageMetadata({
   title: 'Accessibility',
   description:
-    "Tracking accessibility upgrades across Queensland's public transport network — station lifts, platform improvements, and inclusive design progress.",
+    "Tracking accessibility upgrades across Queensland's public transport network: station lifts, platform improvements, and inclusive design progress.",
   slug: 'accessibility',
 })
 
@@ -115,7 +116,7 @@ const stations: Station[] = [
     tactile: true,
     levelBoarding: false,
     hearingLoop: false,
-    notes: 'Stairs only — no accessible path',
+    notes: 'Stairs only, no accessible path',
   },
   {
     name: 'Chelmer',
@@ -193,7 +194,7 @@ const stations: Station[] = [
     tactile: true,
     levelBoarding: true,
     hearingLoop: true,
-    notes: 'Modern station — fully accessible',
+    notes: 'Modern station, fully accessible',
   },
 ]
 
@@ -445,7 +446,7 @@ function StationTracker() {
                     </div>
                   </td>
                   <td className="text-muted hidden px-4 py-3 text-xs md:table-cell">
-                    {s.notes ?? '—'}
+                    {s.notes ?? 'N/A'}
                   </td>
                 </tr>
               ))}
@@ -484,8 +485,8 @@ function KnownIssues() {
           className="w-full object-cover"
         />
         <figcaption className="caption">
-          Inside an NGR train after the disability accessibility retrofit — new
-          priority seating and improved signage.{' '}
+          Inside an NGR train after the disability accessibility retrofit, with
+          new priority seating and improved signage.{' '}
           <a
             href="https://commons.wikimedia.org/wiki/File:NGR_719_Disability_Upgrade.jpg"
             className="underline"
@@ -624,6 +625,7 @@ function HighPriorityActions() {
 /*  Page                                                               */
 /* ------------------------------------------------------------------ */
 export default function AccessibilityPage() {
+  requireBeta()
   return (
     <main className="overflow-hidden">
       <HeroBanner

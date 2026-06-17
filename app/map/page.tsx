@@ -1,16 +1,18 @@
 import { createPageMetadata } from '@/app/layout'
 import { HeroBanner } from '@/components/hero-banner'
 import { TransportMap } from '@/components/transport-map'
+import { requireBeta } from '@/lib/beta'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = createPageMetadata({
   title: 'Transport Map',
   description:
-    "Explore current Queensland public transport routes — rail, bus, ferry, regional passenger rail, and freight corridors — alongside Better Transport Queensland's proposed improvements.",
+    "Explore current Queensland public transport routes including rail, bus, ferry, regional passenger rail, and freight corridors, alongside Better Transport Queensland's proposed improvements.",
   slug: 'map',
 })
 
 export default function MapPage() {
+  requireBeta()
   return (
     <div className="overflow-hidden">
       <HeroBanner

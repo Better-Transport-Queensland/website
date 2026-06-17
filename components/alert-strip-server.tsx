@@ -5,8 +5,10 @@ import {
   isStillRelevant,
   scoreAlert,
 } from '@/helpers/translinkAlertsHelper'
+import { IS_BETA } from '@/lib/beta'
 
 export async function AlertStripServer() {
+  if (!IS_BETA) return null
   const all = await fetchTranslinkAlerts('all')
   const recent = all
     .filter((a) => isStartedWithinDays(a.startDate, 3) && isStillRelevant(a))

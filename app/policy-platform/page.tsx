@@ -24,7 +24,7 @@ export default function Page() {
       <main className="flex min-h-screen flex-col overflow-hidden">
         <HeroBanner
           title="Policy Platform"
-          lead="Our strategic vision for a safer, more accessible, and better-integrated transport system across Queensland — grounded in evidence and shaped by community input."
+          lead="Our strategic vision for a safer, more accessible, and better-integrated transport system across Queensland, grounded in evidence and shaped by community input."
         >
           <div className="mt-8 flex flex-wrap items-center gap-4">
             <Button

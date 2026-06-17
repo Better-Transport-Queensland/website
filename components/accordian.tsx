@@ -15,7 +15,7 @@ export function Accordion({
 
   return (
     <div
-      className="border-b border-subtle"
+      className="border-b border-gray-300 dark:border-gray-600"
       // Make the whole block clickable
       role="button"
       aria-expanded={isOpen}

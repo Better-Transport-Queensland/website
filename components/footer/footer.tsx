@@ -107,9 +107,10 @@ export function Footer({ bare }: { bare?: boolean }) {
         </div>
       </div>
       <div className="text-on-brand border-t border-indigo-200 py-4 text-center text-xs">
-        Better Transport Queensland is an independent community organisation. We
-        are not affiliated with, endorsed by, or connected to the Queensland
-        Government, TransLink, Queensland Rail, or any local council.
+        Better Transport Queensland Inc. is an independent community
+        organisation. We are not affiliated with, endorsed by, or connected to
+        the Queensland Government, TransLink, Queensland Rail, or any local
+        council.
       </div>
     </Container>
   )

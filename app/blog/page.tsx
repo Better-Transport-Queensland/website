@@ -10,7 +10,7 @@ import type { Metadata } from 'next'
 export const metadata: Metadata = createPageMetadata({
   title: 'Blog',
   description:
-    'Explore diverse perspectives from passionate community members on the Better Transport Queensland (BTQ) blog. Dive into personal opinions, creative ideas, and vibrant discussions about public, active, and sustainable transport—directly from the voices that care the most!',
+    'Explore diverse perspectives from passionate community members on the Better Transport Queensland (BTQ) blog. Dive into personal opinions, creative ideas, and vibrant discussions about public, active, and sustainable transport, directly from the voices that care the most!',
   slug: 'blog',
 })
 
@@ -19,7 +19,7 @@ export default function Page() {
     <main className="flex min-h-screen flex-col overflow-hidden">
       <HeroBanner
         title="Blog"
-        lead="Perspectives, ideas, and discussions from our passionate community — covering everything from rail policy to active transport."
+        lead="Perspectives, ideas, and discussions from our passionate community, covering everything from rail policy to active transport."
       />
 
       <div className="grow">

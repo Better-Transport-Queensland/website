@@ -101,24 +101,28 @@ function PricingCards() {
 
 function PricingCard({ tier }: { tier: (typeof tiers)[number] }) {
   return (
-    <Card className="relative p-10 pb-9 shadow-sm">
+    <Card className="relative bg-white p-10 pb-9 shadow-sm dark:bg-[var(--surface-card-bg)]">
       <Subheading>{tier.name}</Subheading>
       <p className="mt-2 text-sm/6 text-gray-950/75 dark:text-gray-300">
         {tier.description}
       </p>
       <div className="mt-8 flex items-center gap-4">
-        <div className="text-5xl font-medium text-heading">
-          ${tier.priceMonthly}
-        </div>
-        <div className="text-sm/5 text-gray-950/75 dark:text-gray-300">
-          <p>AUD</p>
-          <p>per year</p>
-        </div>
+        {tier.priceMonthly === 0 ? (
+          <div className="text-heading text-5xl font-medium">On Us</div>
+        ) : (
+          <>
+            <div className="text-heading text-5xl font-medium">
+              ${tier.priceMonthly}
+            </div>
+            <div className="text-sm/5 text-gray-950/75 dark:text-gray-300">
+              <p>AUD</p>
+              <p>per year</p>
+            </div>
+          </>
+        )}
       </div>
       <div className="mt-8 mb-8">
-        <h3 className="text-sm/6 font-medium text-heading">
-          Benefits
-        </h3>
+        <h3 className="text-heading text-sm/6 font-medium">Benefits</h3>
         <ul className="mt-3 space-y-3">
           {tier.highlights?.map((props, featureIndex) => (
             <FeatureItem key={featureIndex} {...props} />
@@ -126,9 +130,7 @@ function PricingCard({ tier }: { tier: (typeof tiers)[number] }) {
         </ul>
       </div>
       <div className="mb-8">
-        <h3 className="text-sm/6 font-medium text-heading">
-          Requirements
-        </h3>
+        <h3 className="text-heading text-sm/6 font-medium">Requirements</h3>
         <ul className="mt-3 space-y-1">
           {tier.requirements?.map((requirement, featureIndex) => (
             <RequirementItem key={featureIndex} requirement={requirement} />
@@ -174,7 +176,7 @@ function RequirementItem({ requirement }: { requirement: Requirement }) {
       </div>
 
       {requirement.options && (
-        <ol className="mt-1 ml-7 space-y-1 text-xs text-prose">
+        <ol className="text-prose mt-1 ml-7 space-y-1 text-xs">
           {requirement.options.map((option, index) => (
             <li key={index} className="flex items-start gap-2">
               <span className="inline-flex h-4 items-center pt-0.5">
@@ -303,8 +305,8 @@ export default function Pricing() {
   return (
     <main className="overflow-hidden">
       <HeroBanner
-        title="Influence change to improve transport throughout Queensland!"
-        lead="Better Transport Queensland is a not-for-profit organisation that advocates for public and active transport as well as regional transport and freight rail. We are a community of people who are passionate about improving transport throughout Queensland."
+        title="Help shape the future of transport in Queensland"
+        lead="Join a community of people who are passionate about improving transport throughout Queensland."
       />
 
       <PricingCards />

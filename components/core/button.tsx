@@ -14,13 +14,13 @@ const variants = {
     'inline-flex items-center justify-center border border-transparent',
     'text-base font-semibold whitespace-nowrap text-white',
     'bg-[var(--color-gray-800)] hover:bg-[var(--color-gray-900)]',
-    'dark:bg-[var(--color-gray-700)] dark:hover:bg-[var(--color-gray-600)]',
+    'dark:bg-[var(--color-gray-800)] dark:hover:bg-[var(--color-gray-600)]',
     'transition duration-200 ease-in-out',
   ),
   outline: clsx(
     'inline-flex items-center justify-center border border-[var(--input-border)]',
     'font-medium whitespace-nowrap text-[var(--input-text)]',
-    'disabled:bg-transparent disabled:opacity-40 hover:bg-[var(--nav-hover-bg)]',
+    'hover:bg-[var(--nav-hover-bg)] disabled:bg-transparent disabled:opacity-40',
     'transition duration-200 ease-in-out',
   ),
 }

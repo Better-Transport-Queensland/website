@@ -1,7 +1,11 @@
 import { createPageMetadata } from '@/app/layout'
 import { Container } from '@/components/core/container'
 import { HeroBanner } from '@/components/hero-banner'
-import { fetchTranslinkAlerts, scoreAlert } from '@/helpers/translinkAlertsHelper'
+import {
+  fetchTranslinkAlerts,
+  scoreAlert,
+} from '@/helpers/translinkAlertsHelper'
+import { requireBeta } from '@/lib/beta'
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { AlertsClient } from './alerts-client'
@@ -9,11 +13,12 @@ import { AlertsClient } from './alerts-client'
 export const metadata: Metadata = createPageMetadata({
   title: 'Service Alerts',
   description:
-    'Live Translink service alerts — track current delays, disruptions, and planned outages across the Queensland public transport network.',
+    'Live Translink service alerts. Track current delays, disruptions, and planned outages across the Queensland public transport network.',
   slug: 'service-alerts',
 })
 
 export default async function ServiceAlertsPage() {
+  requireBeta()
   const alerts = await fetchTranslinkAlerts('all')
   alerts.sort((a, b) => scoreAlert(b) - scoreAlert(a))
 
@@ -41,10 +46,10 @@ export default async function ServiceAlertsPage() {
           >
             Translink open data feed
           </Link>{' '}
-          under the Creative Commons (CC-BY) licence. Updates may be delayed by a few minutes.
+          under the Creative Commons (CC-BY) licence. Updates may be delayed by
+          a few minutes.
         </p>
       </Container>
-
     </div>
   )
 }

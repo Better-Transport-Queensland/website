@@ -8,16 +8,18 @@ import {
   isStillRelevant,
   scoreAlert,
 } from '@/helpers/translinkAlertsHelper'
+import { requireBeta } from '@/lib/beta'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = createPageMetadata({
   title: 'Live Train Positions',
   description:
-    'Track live Queensland train positions and current service alerts on the SEQ rail network — powered by the Translink GTFS real-time feed.',
+    'Track live Queensland train positions and current service alerts on the SEQ rail network, powered by the Translink GTFS real-time feed.',
   slug: 'live-trains',
 })
 
 export default async function LiveTrainsPage() {
+  requireBeta()
   const all = await fetchTranslinkAlerts('all')
   const alerts = all
     .filter((a) => isStartedWithinDays(a.startDate, 3) && isStillRelevant(a))
@@ -46,7 +48,6 @@ export default async function LiveTrainsPage() {
       <Container className="mt-8 mb-16">
         <LiveTrainsMap initialAlerts={alerts} />
       </Container>
-
     </div>
   )
 }

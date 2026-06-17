@@ -4,6 +4,7 @@ import { Card } from '@/components/core/card'
 import { Container } from '@/components/core/container'
 import { Heading, Lead, Subheading } from '@/components/core/text'
 import { HeroBanner } from '@/components/hero-banner'
+import { requireBeta } from '@/lib/beta'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = createPageMetadata({
@@ -53,7 +54,7 @@ const benefitsForDrivers = [
       </svg>
     ),
     title: 'Save Money',
-    body: 'The average Queensland household spends over $15,000 a year running a car. A go card costs a fraction of that — even before factoring in parking, tolls, and depreciation.',
+    body: 'The average Queensland household spends over $15,000 a year running a car. A go card costs a fraction of that, even before factoring in parking, tolls, and depreciation.',
   },
   {
     icon: (
@@ -91,7 +92,7 @@ const benefitsForDrivers = [
       </svg>
     ),
     title: 'Free Up Your Time',
-    body: 'On a train or bus you can read, work, or just relax. Driving demands 100% of your attention — PT gives that time back to you.',
+    body: 'On a train or bus you can read, work, or just relax. Driving demands 100% of your attention. PT gives that time back to you.',
   },
 ]
 
@@ -114,7 +115,7 @@ const gettingStartedSteps = [
   {
     step: '4',
     title: 'Mix & Match Modes',
-    body: 'Combine train, bus, ferry, and tram in a single journey. Transfers within one hour are free — the system is built for multi-modal trips.',
+    body: 'Combine train, bus, ferry, and tram in a single journey. Transfers within one hour are free. The system is built for multi-modal trips.',
   },
 ]
 
@@ -149,7 +150,7 @@ function WhyItMatters() {
           Why Public Transport Matters
         </Heading>
         <Lead className="mx-auto mt-4 max-w-2xl">
-          Good public transport isn&apos;t just for riders — it makes cities
+          Good public transport isn&apos;t just for riders. It makes cities
           healthier, more affordable, and better connected for everyone.
         </Lead>
       </div>
@@ -259,7 +260,7 @@ function DriversSection() {
           <p>
             Better PT means fewer cars competing for road space during peak
             hours. When your neighbour catches the train instead of driving, the
-            motorway is less congested — for both of you.
+            motorway is less congested, for both of you.
           </p>
           <p>
             It also means less pressure to widen roads and build new car parks
@@ -267,15 +268,15 @@ function DriversSection() {
             road maintenance, safety improvements, and the services you rely on.
           </p>
           <p>
-            And on the days when driving isn&apos;t ideal — major events, bad
-            weather, or when parking is impossible — a reliable PT network gives
+            And on the days when driving isn&apos;t ideal, like major events, bad
+            weather, or when parking is impossible, a reliable PT network gives
             you a genuine backup plan.
           </p>
           <p>
             <strong className="text-heading">
               Everyone benefits when public transport works.
             </strong>{' '}
-            Whether you ride it daily, occasionally, or never — investment in PT
+            Whether you ride it daily, occasionally, or never, investment in PT
             makes Queensland a better place to live.
           </p>
         </div>
@@ -288,11 +289,12 @@ function DriversSection() {
 /*  Page                                                               */
 /* ------------------------------------------------------------------ */
 export default function WhyPublicTransport() {
+  requireBeta()
   return (
     <main className="overflow-hidden">
       <HeroBanner
         title="Why Public Transport?"
-        lead="Better public transport benefits everyone — riders, drivers, and the communities in between. Here's why it matters and how to get started."
+        lead="Better public transport benefits everyone: riders, drivers, and the communities in between. Here's why it matters and how to get started."
       />
 
       <div className="space-y-20 py-20 sm:space-y-28 sm:py-28">
