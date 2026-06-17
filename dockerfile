@@ -13,6 +13,11 @@ RUN npm ci
 # Copy the rest of the application source
 COPY . .
 
+# Beta mode is a build-time flag: NEXT_PUBLIC_* values are inlined by Next
+# during the build. Defaults to false; CI sets it to true for prereleases.
+ARG NEXT_PUBLIC_IS_BETA=false
+ENV NEXT_PUBLIC_IS_BETA=$NEXT_PUBLIC_IS_BETA
+
 # Build the Next.js application (standalone mode enabled in next.config.mjs)
 RUN npm run build
 
