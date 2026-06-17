@@ -105,3 +105,7 @@ class RateLimiter {
 export const contactFormLimiter = new RateLimiter(1, 5 * 60 * 1000)
 export const contactFormGlobalLimiter = new RateLimiter(2, 60 * 1000)
 export const contactFormSpamLimiter = new RateLimiter(10, 30 * 60 * 1000)
+// Per IP: counts every attempt (success or failure) to throttle flooding and
+// spam-filter probing. More lenient than the success limiter above so a
+// legitimate user can still retry after a validation error.
+export const contactFormAttemptLimiter = new RateLimiter(5, 5 * 60 * 1000)

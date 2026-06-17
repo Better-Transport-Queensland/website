@@ -5,21 +5,26 @@ import {
   type DiscourseConfig,
 } from '@/lib/discourse-config.server'
 import {
+  contactFormAttemptLimiter,
   contactFormGlobalLimiter,
   contactFormLimiter,
   contactFormSpamLimiter,
 } from '@/lib/rate-limiter'
 import { spamDetector } from '@/lib/spam-detector'
 import { NextRequest, NextResponse } from 'next/server'
+import validator from 'validator'
+import { z } from 'zod'
 
-// Types
-interface ContactFormData {
-  name: string
-  email: string
-  purpose: string
-  subject: string
-  message: string
-}
+// Schema and types
+const contactFormSchema = z.object({
+  name: z.string().trim().min(1).max(CONTACT_FORM_MAX_LENGTHS.NAME),
+  email: z.email().max(CONTACT_FORM_MAX_LENGTHS.EMAIL),
+  purpose: z.enum(ContactPurpose),
+  subject: z.string().trim().min(1).max(CONTACT_FORM_MAX_LENGTHS.SUBJECT),
+  message: z.string().trim().min(1).max(CONTACT_FORM_MAX_LENGTHS.MESSAGE),
+})
+
+type ContactFormData = z.infer<typeof contactFormSchema>
 
 interface SanitizedContactFormData {
   sanitizedName: string
@@ -31,14 +36,39 @@ interface SanitizedContactFormData {
 
 // Helper functions
 function getClientIp(request: NextRequest): string {
-  return (
-    request.headers.get('x-forwarded-for')?.split(',')[0] ||
-    request.headers.get('x-real-ip') ||
-    'unknown'
-  )
+  // Cloudflare sets cf-connecting-ip to the real client IP; the client cannot
+  // spoof it (Cloudflare overwrites any value), so trust it first.
+  const cfIp = request.headers.get('cf-connecting-ip')?.trim()
+  if (cfIp) return cfIp
+
+  // Fallback: use the RIGHTMOST X-Forwarded-For entry — the hop appended by the
+  // closest trusted proxy — never the spoofable left-most client-supplied value.
+  const xff = request.headers.get('x-forwarded-for')
+  if (xff) {
+    const parts = xff
+      .split(',')
+      .map((p) => p.trim())
+      .filter(Boolean)
+    if (parts.length > 0) return parts[parts.length - 1]
+  }
+
+  return request.headers.get('x-real-ip')?.trim() || 'unknown'
 }
 
 function checkRateLimits(ip: string): NextResponse | null {
+  // Per-IP attempt limit: counts EVERY request (not just successful ones), so
+  // floods and spam-filter probing are throttled even when they never succeed.
+  const attemptResult = contactFormAttemptLimiter.check(ip)
+  if (!attemptResult.allowed) {
+    return NextResponse.json(
+      {
+        error: `Too many requests. Please try again shortly.`,
+      },
+      { status: 429 },
+    )
+  }
+  contactFormAttemptLimiter.increment(ip)
+
   // Check global rate limit
   const globalRateLimitResult = contactFormGlobalLimiter.check('global')
   if (!globalRateLimitResult.allowed) {
@@ -86,82 +116,35 @@ function checkConfiguration(): NextResponse | null {
   return null
 }
 
-function validateFormData(formData: ContactFormData): NextResponse | null {
-  const { name, email, purpose, subject, message } = formData
-
-  // Validate required fields
-  if (!name || !email || !purpose || !subject || !message) {
-    return NextResponse.json(
-      {
-        error: 'Please fill in all required fields before submitting the form.',
-      },
-      { status: 400 },
-    )
+// Map a Zod validation failure to a user-friendly, non-leaky message that
+// mirrors the previous hand-rolled responses.
+function validationErrorMessage(error: z.ZodError): string {
+  const issue = error.issues[0]
+  if (issue?.code === 'too_big') {
+    return 'One or more fields exceed the maximum length.'
   }
-
-  // Validate types
-  if (
-    typeof name !== 'string' ||
-    typeof email !== 'string' ||
-    typeof purpose !== 'string' ||
-    typeof subject !== 'string' ||
-    typeof message !== 'string'
-  ) {
-    return NextResponse.json(
-      {
-        error: 'There was a problem with your submission.',
-      },
-      { status: 400 },
-    )
+  if (issue?.path[0] === 'email') {
+    return 'Please enter a valid email address.'
   }
-
-  // Validate input lengths
-  if (
-    name.length > CONTACT_FORM_MAX_LENGTHS.NAME ||
-    email.length > CONTACT_FORM_MAX_LENGTHS.EMAIL ||
-    purpose.length > CONTACT_FORM_MAX_LENGTHS.PURPOSE ||
-    subject.length > CONTACT_FORM_MAX_LENGTHS.SUBJECT ||
-    message.length > CONTACT_FORM_MAX_LENGTHS.MESSAGE
-  ) {
-    return NextResponse.json(
-      {
-        error: 'One or more fields exceed the maximum length.',
-      },
-      { status: 400 },
-    )
+  if (issue?.path[0] === 'purpose') {
+    return 'Invalid purpose selected.'
   }
-
-  // Validate email format (RFC 5321 compliant)
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-  if (!emailRegex.test(email)) {
-    return NextResponse.json(
-      {
-        error: 'Please enter a valid email address.',
-      },
-      { status: 400 },
-    )
-  }
-
-  // Validate purpose against allowed values from enum
-  const allowedPurposes = Object.values(ContactPurpose)
-  if (!allowedPurposes.includes(purpose as ContactPurpose)) {
-    return NextResponse.json(
-      {
-        error: 'Invalid purpose selected.',
-      },
-      { status: 400 },
-    )
-  }
-
-  return null
+  return 'Please fill in all required fields before submitting the form.'
 }
 
-function sanitize(input: string): string {
-  return input
-    .replace(/[\x00-\x1F\x7F]/g, '') // Remove control characters
-    .replace(/<[^>]*>/g, '') // Remove all HTML tags (including <iframe>, <script>, etc.)
-    .replace(/&[^;]+;/g, '') // Remove HTML entities
-    .trim()
+function sanitize(input: string, allowNewlines = false): string {
+  // Normalise line endings first so newline handling is consistent.
+  const normalized = allowNewlines ? input.replace(/\r\n?/g, '\n') : input
+
+  // validator.stripLow removes control chars (< 0x20 and 0x7F); the second arg
+  // keeps newlines for multi-line fields.
+  return validator
+    .trim(
+      validator
+        .stripLow(normalized, allowNewlines)
+        .replace(/<[^>]*>/g, '') // Remove all HTML tags (<script>, <iframe>, ...)
+        .replace(/&[^;]+;/g, ''), // Remove HTML entities
+    )
 }
 
 function sanitizeFormData(formData: ContactFormData): SanitizedContactFormData {
@@ -169,7 +152,7 @@ function sanitizeFormData(formData: ContactFormData): SanitizedContactFormData {
     sanitizedName: sanitize(formData.name),
     sanitizedEmail: sanitize(formData.email),
     sanitizedSubject: sanitize(formData.subject),
-    sanitizedMessage: sanitize(formData.message),
+    sanitizedMessage: sanitize(formData.message, true), // preserve line breaks
     purpose: formData.purpose,
   }
 }
@@ -234,18 +217,34 @@ function formatPurpose(value: string): string {
   return value.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())
 }
 
+// Neutralise Discourse Markdown so user input renders as literal text and
+// cannot inject mentions, links, images/oneboxes, formatting, or forge the
+// **Name:**/**Email:** template lines.
+function escapeMarkdown(input: string, breakMentions = true): string {
+  // Backslash-escape every ASCII punctuation char. Per CommonMark the
+  // backslash is dropped on render, so only the literal character is shown
+  // (and copy/paste stays clean).
+  const escaped = input.replace(/[!"#$%&'()*+,\-./:;<=>?[\\\]^_`{|}~]/g, '\\$&')
+
+  // Backslash-escaping does not reliably disable Discourse @mentions, so for
+  // free-text fields insert a zero-width space to break the mention pattern.
+  // Skipped for the email field (its @ is mid-token, never a mention) to keep
+  // the address copy/paste-able.
+  return breakMentions ? escaped.replace(/@/g, '@\u200B') : escaped
+}
+
 function createDiscoursePayload(
   sanitizedData: SanitizedContactFormData,
   cfg: DiscourseConfig,
 ) {
   const title = `[${formatPurpose(sanitizedData.purpose)}] ${sanitizedData.sanitizedSubject}`
 
-  const raw = `**Name:** ${sanitizedData.sanitizedName}
-**Email:** ${sanitizedData.sanitizedEmail}
+  const raw = `**Name:** ${escapeMarkdown(sanitizedData.sanitizedName)}
+**Email:** ${escapeMarkdown(sanitizedData.sanitizedEmail, false)}
 
 ---
 
-${sanitizedData.sanitizedMessage}`
+${escapeMarkdown(sanitizedData.sanitizedMessage)}`
 
   const categoryId = parseInt(cfg.contactCategoryId ?? '0')
   if (isNaN(categoryId) || categoryId <= 0) {
@@ -311,11 +310,35 @@ export async function POST(request: NextRequest) {
     const configError = checkConfiguration()
     if (configError) return configError
 
-    // Parse and validate form data
-    const formData: ContactFormData = await request.json()
+    // Reject oversized payloads before parsing the whole body into memory.
+    const contentLength = Number(request.headers.get('content-length') ?? '0')
+    if (Number.isFinite(contentLength) && contentLength > 32 * 1024) {
+      return NextResponse.json(
+        { error: 'Request payload too large.' },
+        { status: 413 },
+      )
+    }
 
-    const validationError = validateFormData(formData)
-    if (validationError) return validationError
+    // Parse the body, rejecting malformed JSON explicitly
+    let body: unknown
+    try {
+      body = await request.json()
+    } catch {
+      return NextResponse.json(
+        { error: 'There was a problem with your submission.' },
+        { status: 400 },
+      )
+    }
+
+    // Validate against the schema
+    const parsed = contactFormSchema.safeParse(body)
+    if (!parsed.success) {
+      return NextResponse.json(
+        { error: validationErrorMessage(parsed.error) },
+        { status: 400 },
+      )
+    }
+    const formData = parsed.data
 
     // Sanitize inputs
     const sanitizedData = sanitizeFormData(formData)
@@ -333,7 +356,7 @@ export async function POST(request: NextRequest) {
     const devModeResponse = handleDevMode(formData.subject)
     if (devModeResponse) return devModeResponse
 
-    var cfg = getDiscourseConfig()
+    const cfg = getDiscourseConfig()
 
     // Submit to Discourse
     const response = await submitToDiscourse(sanitizedData, cfg)

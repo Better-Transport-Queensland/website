@@ -35,13 +35,16 @@
     "react-use-measure": "^2.1.7",
     "rss-parser": "^3.13.0",
     "sanity": "^4.20.3",
-    "xml2js": "^0.6.2"
+    "validator": "^13.15.35",
+    "xml2js": "^0.6.2",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "@types/adm-zip": "^0.5.7",
     "@types/node": "^24.10.1",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
+    "@types/validator": "^13.15.10",
     "@types/xml2js": "^0.4.14",
     "autoprefixer": "^10.4.22",
     "baseline-browser-mapping": "^2.10.13",
