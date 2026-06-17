@@ -28,6 +28,11 @@ yarn-error.log*
 # local env files
 .env*.local
 
+# generated GTFS static data (run `npm run fetch-gtfs` to regenerate)
+/public/gtfs-stops.json
+/public/gtfs-routes.json
+/public/gtfs-rail-stops.json
+
 # vercel
 .vercel
 
@@ -37,3 +42,6 @@ next-env.d.ts
 
 # ides
 /.vscode/
+/.zed/
+
+.env

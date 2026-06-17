@@ -1,29 +1,31 @@
 'use client'
+import { clsx } from 'clsx'
 import Link from 'next/link'
 
 export function Card({
+  as: Element = 'div',
   children,
   link,
+  className,
+  target,
+  rel,
 }: {
+  as?: 'div' | 'article' | 'li'
   children: React.ReactNode
   link?: string
+  className?: string
+  target?: string
+  rel?: string
 }) {
+  const classes = clsx('surface-card p-6 hover:shadow-md', className)
+
   if (link) {
     return (
-      <Link href={link} passHref>
-        <div
-          className="rounded-lg border border-gray-200 bg-white p-6 shadow-md transition-shadow duration-300 hover:cursor-pointer hover:shadow-lg"
-          rel="noopener noreferrer" // Security measure
-        >
-          {children}
-        </div>
+      <Link href={link} className={classes} target={target} rel={rel}>
+        {children}
       </Link>
     )
   }
 
-  return (
-    <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-md transition-shadow duration-300 hover:shadow-lg">
-      {children}
-    </div>
-  )
+  return <Element className={classes}>{children}</Element>
 }

@@ -1,0 +1,587 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Cross River Rail",
+        "mode": "proposed-rail",
+        "description": "New underground rail through Brisbane CBD connecting Dutton Park to Bowen Hills with new stations at Boggo Road, Woolloongabba, Albert Street, and Roma Street. Currently under construction — unlocks network capacity by removing the bottleneck at the Merivale Bridge. Expected to enable turn-up-and-go frequency across the entire suburban network."
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [153.034, -27.4913],
+          [153.034, -27.4888],
+          [153.0344, -27.4822],
+          [153.0271, -27.4708],
+          [153.0235, -27.4679],
+          [153.0296, -27.4531],
+          [153.0449, -27.4284]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Sunshine Coast Direct Rail",
+        "mode": "proposed-rail",
+        "description": "A dedicated, faster rail connection from Brisbane to the Sunshine Coast via Caboolture and Beerwah, bypassing the current slow North Coast Line alignment through Nambour. Would cut Brisbane–Maroochydore travel time to under an hour, supporting the rapidly growing Sunshine Coast population and reducing road congestion on the Bruce Highway."
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [153.0235, -27.4679],
+          [153.0199, -27.3207],
+          [153.0077, -27.297],
+          [153.0002, -27.2353],
+          [152.9861, -27.1148],
+          [153.035, -26.9381],
+          [153.066, -26.8015],
+          [153.0996, -26.6502]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Gold Coast Light Rail — Stage 4 to Airport",
+        "mode": "proposed-rail",
+        "description": "Extension of the Gold Coast Light Rail south from Broadbeach through Burleigh Heads, Palm Beach, and Currumbin to Coolangatta / Gold Coast Airport (OOL). Completes the coastal public transport spine and provides rail access to the airport for the first time. Critical for 2032 Olympic visitor movement."
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [153.425, -27.975],
+          [153.4310, -28.005],
+          [153.4340, -28.025],
+          [153.4380, -28.050],
+          [153.4430, -28.083],
+          [153.4600, -28.110],
+          [153.4850, -28.140],
+          [153.5050, -28.165],
+          [153.5080, -28.172]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Springfield Central to Ipswich Rail Connection",
+        "mode": "proposed-rail",
+        "description": "Proposed rail link connecting Springfield Central to Ipswich, creating a cross-suburban orbital connection in the western corridor. Reduces dependence on the CBD-centric radial network and allows Springfield residents to access Ipswich services (and vice versa) without travelling through the city."
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [152.9064, -27.6706],
+          [152.874, -27.656],
+          [152.834, -27.635],
+          [152.7666, -27.612]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Cleveland Line Duplication",
+        "mode": "proposed-rail",
+        "description": "Full duplication of the Cleveland line beyond Manly to Cleveland. The current single-track section limits services to every 30 minutes in the off-peak, causing poor patronage. Duplication would enable 15-minute all-day frequency and unlock the eastern bayside corridor for transit-oriented development."
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [153.1547, -27.4522],
+          [153.1744, -27.4478],
+          [153.2068, -27.4461],
+          [153.2268, -27.4397],
+          [153.2602, -27.4355],
+          [153.286, -27.5217]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Brisbane Metro",
+        "mode": "proposed-bus",
+        "description": "High-frequency metro-style bus rapid transit using battery-electric vehicles on dedicated busways. Transforms the South East and Northern busways into a true rapid transit network with turn-up-and-go frequency (every 3 minutes). Custom vehicles with platform doors at key stations for fast boarding."
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [153.089, -27.5639],
+          [153.0826, -27.5508],
+          [153.0637, -27.5152],
+          [153.0425, -27.4947],
+          [153.0195, -27.4735],
+          [153.0208, -27.4679],
+          [153.0235, -27.4609],
+          [153.024, -27.456],
+          [153.0272, -27.4489],
+          [153.027, -27.43],
+          [153.0371, -27.388]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Eastern Busway Extension to Capalaba",
+        "mode": "proposed-bus",
+        "description": "Completing the Eastern Busway from Buranda through Coorparoo, Carindale, and Belmont to Capalaba. The eastern suburbs are the largest gap in Brisbane's dedicated rapid transit network. This corridor serves major shopping centres (Westfield Carindale), schools, and established suburbs with no current high-quality public transport."
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [153.0513, -27.4973],
+          [153.0679, -27.4897],
+          [153.0857, -27.4911],
+          [153.1043, -27.4856],
+          [153.1571, -27.49],
+          [153.1944, -27.508],
+          [153.2245, -27.524]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Trouts Road Transit Corridor",
+        "mode": "proposed-bus",
+        "description": "New dedicated transit corridor connecting northern suburbs (Aspley, Chermside West) to the CBD via Trouts Road, bypassing congested Gympie Road. Would dramatically improve reliability and speed for thousands of northside commuters who currently sit in traffic on one of Brisbane's worst bottleneck corridors."
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [153.024, -27.456],
+          [153.0192, -27.4395],
+          [153.0166, -27.4172],
+          [153.0192, -27.3946],
+          [153.0309, -27.375],
+          [153.046, -27.354]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Centenary Motorway BRT",
+        "mode": "proposed-bus",
+        "description": "Bus rapid transit on the Centenary Motorway corridor, serving Jindalee, Mount Ommaney, Forest Lake, and the growing western suburbs. This corridor has seen massive population growth with no public transport improvements — residents are entirely car-dependent for trips that should be quick transit journeys."
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [153.0208, -27.4679],
+          [153.009, -27.4604],
+          [152.9887, -27.4549],
+          [152.963, -27.4499],
+          [152.9345, -27.4631],
+          [152.914, -27.493],
+          [152.896, -27.525],
+          [152.875, -27.545],
+          [152.85, -27.565]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Gold Coast East–West Rapid Bus",
+        "mode": "proposed-bus",
+        "description": "Cross-city rapid bus connecting Robina, Nerang, and Southport to provide east–west connectivity on the Gold Coast. The current network is overwhelmingly north–south along the coast — residents in western Gold Coast suburbs have almost no viable public transport to reach jobs and services."
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [153.3157, -27.9581],
+          [153.311, -27.908],
+          [153.358, -27.922]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Enhanced Brisbane River Ferry Network",
+        "mode": "proposed-ferry",
+        "description": "Expanded ferry services with more frequent stops, extended operating hours, faster vessels, and new cross-river connections. Includes upstream extension to Fig Tree Pocket / Jindalee and downstream to Portside / Hamilton Northshore. The river is an underused transport corridor that could carry far more passengers with proper investment."
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [152.992, -27.508],
+          [153.0, -27.497],
+          [153.005, -27.49],
+          [153.0125, -27.4968],
+          [153.0062, -27.4818],
+          [153.0172, -27.4763],
+          [153.0235, -27.4692],
+          [153.0345, -27.4582],
+          [153.0605, -27.4342],
+          [153.0702, -27.4205],
+          [153.0846, -27.4088],
+          [153.12, -27.405]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Brisbane–Toowoomba Fast Rail",
+        "mode": "proposed-regional-rail",
+        "description": "Fast rail connection from Brisbane to Toowoomba via the Lockyer Valley, cutting travel time to under an hour. Would transform Toowoomba into a viable commuter city for Brisbane and support inland economic development. The existing rail service is infrequent and painfully slow."
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [153.0235, -27.4679],
+          [152.7666, -27.612],
+          [152.37, -27.58],
+          [151.951, -27.561]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Brisbane–Gold Coast Fast Rail",
+        "mode": "proposed-regional-rail",
+        "description": "Dedicated high-speed rail between Brisbane and the Gold Coast with journey times under 30 minutes. Over 100,000 people commute between the two cities daily — the current M1 motorway is at capacity and the existing rail service is too slow to compete. This is one of Australia's most obvious fast rail corridors."
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [153.0235, -27.4679],
+          [153.048, -27.531],
+          [153.07, -27.61],
+          [153.12, -27.72],
+          [153.2, -27.84],
+          [153.27, -27.88],
+          [153.358, -27.922]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Upgraded North Coast Line (Passenger)",
+        "mode": "proposed-regional-rail",
+        "description": "Major upgrades to the North Coast Line to enable faster, more frequent regional passenger services between Brisbane, Bundaberg, Rockhampton, Mackay, Townsville, and Cairns. Current services are infrequent (some twice-weekly), painfully slow, and unreliable. Queensland's regional cities deserve a modern rail service."
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [153.0235, -27.4679],
+          [152.702, -25.519],
+          [152.347, -24.867],
+          [150.513, -23.378],
+          [149.186, -21.142],
+          [146.788, -19.257],
+          [145.778, -16.923]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Brisbane–Sydney High Speed Rail",
+        "mode": "high-speed-rail",
+        "description": "A transformational high-speed rail link connecting Brisbane to Sydney via the inland route through Toowoomba, the Darling Downs, Armidale, Tamworth, and the Hunter Valley. ~900 km at 350 km/h would deliver a journey time of around 3 hours — competitive with air travel when CBD-to-CBD times are considered. Would connect regional cities, reduce short-haul aviation emissions, and create a genuine megaregion along Australia's east coast."
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [153.0235, -27.4679],
+          [152.7666, -27.612],
+          [152.37, -27.58],
+          [151.951, -27.561],
+          [151.65, -27.56],
+          [151.10, -28.20],
+          [150.60, -29.10],
+          [151.67, -30.50],
+          [151.08, -31.08],
+          [150.93, -31.90],
+          [151.26, -32.75],
+          [151.55, -33.28],
+          [151.21, -33.87]
+        ]
+      }
+    },
+
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Route 29 Extension to UQ St Lucia",
+        "mode": "olympic-fix",
+        "description": "Restore and extend the Route 29 bus to terminate at UQ St Lucia. The 29 currently ends at Woolloongabba — extending it to UQ would provide a direct connection between the Gabba Olympic Stadium precinct and the University of Queensland, serving tens of thousands of students and spectators. Essential for Olympic spectator movement and a permanent improvement for everyday commuters."
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [153.0344, -27.4822],
+          [153.0310, -27.4880],
+          [153.0270, -27.4910],
+          [153.0210, -27.4930],
+          [153.0150, -27.4960],
+          [153.0125, -27.4968]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Gabba Precinct — Frequent Shuttle Loop",
+        "mode": "olympic-fix",
+        "description": "High-frequency shuttle bus loop connecting the Gabba (main Olympic stadium) to surrounding transport hubs: Woolloongabba Cross River Rail station, South Bank busway, Park Road rail station, and Mater Hill bus stops. Should run every 3–5 minutes on event days and every 10 minutes otherwise. Permanent legacy service for the growing Woolloongabba urban renewal precinct."
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [153.0344, -27.4822],
+          [153.0370, -27.4840],
+          [153.0425, -27.4870],
+          [153.0400, -27.4920],
+          [153.0350, -27.4913],
+          [153.0300, -27.4900],
+          [153.0250, -27.4860],
+          [153.0260, -27.4830],
+          [153.0310, -27.4810],
+          [153.0344, -27.4822]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Chandler Velodrome Express Bus",
+        "mode": "olympic-fix",
+        "description": "Dedicated express bus service from Manly / Wynnum West rail station to the Chandler Velodrome and Sleeman Sports Complex. Currently there is no viable public transport to this Olympic venue — spectators would be entirely car-dependent without this connection. Should become a permanent route serving the Chandler sporting precinct."
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [153.1547, -27.4522],
+          [153.1580, -27.4620],
+          [153.1630, -27.4710],
+          [153.1640, -27.4830],
+          [153.1610, -27.4920],
+          [153.1560, -27.5020]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Suncorp Stadium — Improved Bus Interchange",
+        "mode": "olympic-fix",
+        "description": "Enhanced bus interchange and pedestrian connections at Suncorp Stadium (Lang Park). Current access relies on a long walk from Roma Street or Milton rail stations with poor wayfinding. A dedicated bus interchange on Castlemaine Street with sheltered waiting areas and real-time information would handle Olympic crowds and improve every-event access permanently."
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [153.0095, -27.4646],
+          [153.0130, -27.4620],
+          [153.0160, -27.4600],
+          [153.0208, -27.4609]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Boondall Entertainment Centre — Rail Frequency Boost",
+        "mode": "olympic-fix",
+        "description": "Increase Shorncliffe line frequency to every 10 minutes (from current 30-min off-peak) to support the Brisbane Entertainment Centre at Boondall as an Olympic venue. Current service is inadequate for major events, causing dangerous overcrowding on platforms after events. A permanent frequency improvement would also benefit everyday commuters in the northern bayside."
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [153.0325, -27.3553],
+          [153.0415, -27.3451],
+          [153.0515, -27.3348],
+          [153.065, -27.328]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Sunshine Coast Stadium — Event Shuttles",
+        "mode": "olympic-fix",
+        "description": "Dedicated event shuttle buses from Kawana rail station (future CAMCOS corridor) and Maroochydore to the Sunshine Coast Stadium for Olympic football matches. The Sunshine Coast has virtually no public transport to sporting venues — this connection is essential for Olympic viability and should catalyse permanent transit improvements."
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [153.0607, -26.6867],
+          [153.0850, -26.6700],
+          [153.1100, -26.6600],
+          [153.1270, -26.6520]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Gold Coast Olympic Venues — G:link Frequency Uplift",
+        "mode": "olympic-fix",
+        "description": "Boost Gold Coast Light Rail frequency to every 3–4 minutes during Olympic events at Broadbeach, Robina, and Coomera. Current peak frequency of 7.5 minutes is insufficient for Olympic-scale crowds. Additional tram vehicles and upgraded signalling required. Legacy benefit: permanent high-frequency light rail for the growing Gold Coast."
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [153.285, -27.860],
+          [153.320, -27.887],
+          [153.358, -27.922],
+          [153.383, -27.936],
+          [153.403, -27.943],
+          [153.413, -27.948],
+          [153.425, -27.975]
+        ]
+      }
+    },
+
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Merivale Bridge Bottleneck",
+        "mode": "problem-area",
+        "description": "The Merivale Bridge is the single most critical bottleneck in Brisbane's rail network. Every suburban train from every line must cross this one two-track bridge to reach South Brisbane. It limits the entire network to ~24 trains per hour per direction. Cross River Rail will provide an alternative river crossing, but the Merivale Bridge itself needs additional capacity or replacement in the long term.",
+        "severity": "critical",
+        "category": "Rail Infrastructure"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [153.0178, -27.4710]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Park Road Junction",
+        "mode": "problem-area",
+        "description": "Park Road is where the Beenleigh/Gold Coast, Cleveland, and (future) Cross River Rail lines converge. Flat junctions here cause conflicting train movements that ripple delays across the network. Grade separation (flyover/dive-under) is needed to allow trains to cross without blocking each other. This single junction is responsible for a large proportion of SEQ rail delays.",
+        "severity": "critical",
+        "category": "Rail Infrastructure"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [153.034, -27.4913]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Victoria Bridge Bus Congestion",
+        "mode": "problem-area",
+        "description": "Victoria Bridge carries an enormous volume of buses from the South East Busway into the CBD. During peak hour, buses queue bumper-to-bumper across the bridge, negating the speed advantage of the busway. Brisbane Metro aims to address this with higher-capacity vehicles, but the fundamental constraint is too many bus routes converging on one crossing point.",
+        "severity": "high",
+        "category": "Bus Network"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [153.0195, -27.4735]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Cleveland Line Single Track",
+        "mode": "problem-area",
+        "description": "The Cleveland line is single-track between Manly and Cleveland, meaning trains in opposite directions must wait for each other at passing loops. This limits off-peak services to every 30 minutes — far too infrequent to attract choice riders. Patronage on the eastern section is consequently low, creating a vicious cycle of poor service and low demand.",
+        "severity": "high",
+        "category": "Rail Infrastructure"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [153.1744, -27.4478]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "No Airport–Gold Coast Rail Link",
+        "mode": "problem-area",
+        "description": "There is no direct public transport connection between Brisbane Airport and the Gold Coast. Visitors must travel into the CBD and transfer, turning a 45-minute drive into a 2+ hour journey. For a region hosting the 2032 Olympics across both cities, this is a glaring gap. A direct rail link or express bus service is urgently needed.",
+        "severity": "high",
+        "category": "Missing Connection"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [153.1175, -27.3862]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Beenleigh Line Overcrowding",
+        "mode": "problem-area",
+        "description": "The Beenleigh line through Logan is one of the most overcrowded corridors in the SEQ network. Rapid population growth in the Logan–Beenleigh–Gold Coast corridor has outpaced service improvements. Trains are standing-room-only well before reaching the city. More services, longer trains, and ultimately rail duplication are needed.",
+        "severity": "high",
+        "category": "Capacity"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [153.0855, -27.6108]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Northern Busway Truncated",
+        "mode": "problem-area",
+        "description": "The Northern Busway was planned to extend from RBWH all the way to Bracken Ridge/Aspley but construction stopped after the first short section. Buses on the north side still sit in traffic on Lutwyche Road and Gympie Road — two of Brisbane's most congested arterials. The incomplete busway fails to deliver on its promised benefits for northside commuters.",
+        "severity": "medium",
+        "category": "Bus Network"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [153.0272, -27.4489]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "No East–West Connectivity",
+        "mode": "problem-area",
+        "description": "Brisbane's public transport network is overwhelmingly radial — all lines point to the CBD. Travelling east–west (e.g., Indooroopilly to Carindale, or Chermside to Toowong) requires going into the city and back out, turning a 15-minute drive into a 60+ minute transit trip. Orbital bus routes exist but are infrequent and slow.",
+        "severity": "medium",
+        "category": "Network Design"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [153.0556, -27.5057]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Gold Coast Airport — No Public Transport",
+        "mode": "problem-area",
+        "description": "Gold Coast Airport (OOL) at Coolangatta has no rail or light rail connection. The only public transport is infrequent local buses. For Australia's 6th busiest airport serving a city of 700,000+ people, this is deeply inadequate. The planned Stage 4 of Gold Coast Light Rail would finally connect the airport, but no funding commitment has been made.",
+        "severity": "high",
+        "category": "Missing Connection"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [153.5050, -28.165]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Ferny Grove Line — End of Line Dead End",
+        "mode": "problem-area",
+        "description": "The Ferny Grove line terminates abruptly with no onward connection to the growing north-west suburbs of Samford, Dayboro, or the Moreton Bay hinterland. A bus interchange exists but services are infrequent. Extension or a high-quality busway feeder could unlock the corridor and reduce car dependence in the north-west.",
+        "severity": "medium",
+        "category": "Missing Connection"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [152.9511, -27.3754]
+      }
+    }
+  ]
+}

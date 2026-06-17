@@ -3,7 +3,6 @@ export const dynamic = 'force-dynamic'
 
 import { createPageMetadata } from '@/app/layout'
 import { Container } from '@/components/core/container'
-import { Footer } from '@/components/footer/footer'
 import { Navbar } from '@/components/navbar/navbar'
 import EmbeddedTopic from '@/components/topics/embedded-topic'
 import type { Metadata } from 'next'
@@ -33,7 +32,6 @@ export default async function Page() {
           categoryTitle={categoryTitle}
         />
       </Container>
-      <Footer />
     </main>
   )
 }

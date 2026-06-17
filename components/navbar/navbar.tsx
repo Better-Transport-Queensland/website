@@ -5,8 +5,9 @@ import { Logo } from '@/components/core/logo'
 import { DesktopNavbar } from '@/components/navbar/desktop-navbar'
 import {
   MobileNavbar,
-  MobileNavbarMenu,
+  MobileNavDrawer,
 } from '@/components/navbar/mobile-navbar'
+import { ThemeSwitcher } from '@/components/theme-switcher'
 import { NextEvent } from '@/data/upcoming-event'
 import { Disclosure } from '@headlessui/react'
 import dynamic from 'next/dynamic'
@@ -25,7 +26,7 @@ export function Navbar({ filled }: NavbarProps) {
   const [isOpen, setIsOpen] = useState(false)
 
   return (
-    <Disclosure as="header" className="mt-2 py-8 sm:py-12 dark:text-white">
+    <Disclosure as="header" className="py-8 sm:py-12">
       <header className="flex items-center justify-between gap-6">
         <div className="flex items-center gap-6">
           <div className="flex shrink-0 items-center py-3 md:shrink">
@@ -44,14 +45,20 @@ export function Navbar({ filled }: NavbarProps) {
             </span>
           )}
         </div>
-        <DesktopNavbar filled={filled} />
-        <MobileNavbar
-          filled={filled}
-          isOpen={isOpen}
-          onClick={() => setIsOpen((prev: boolean) => !prev)}
-        />
+        <div className="flex items-center gap-2">
+          <DesktopNavbar filled={filled} />
+          {/* Theme toggle lives in the drawer on mobile; only show it here on desktop */}
+          <span className="hidden lg:block">
+            <ThemeSwitcher filled={filled} />
+          </span>
+          <MobileNavbar
+            filled={filled}
+            isOpen={isOpen}
+            onClick={() => setIsOpen((prev: boolean) => !prev)}
+          />
+        </div>
       </header>
-      <MobileNavbarMenu filled={filled} isOpen={isOpen} />
+      <MobileNavDrawer isOpen={isOpen} onClose={() => setIsOpen(false)} />
     </Disclosure>
   )
 }

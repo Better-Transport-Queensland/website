@@ -91,7 +91,7 @@ export async function Snippets(params: {
 
   // Conditional rendering based on the existence of posts
   return posts.length === 0 ? (
-    <p className="mt-3 text-gray-500">
+    <p className="mt-3 text-muted">
       No posts available at the moment. Please try again later.
     </p>
   ) : (

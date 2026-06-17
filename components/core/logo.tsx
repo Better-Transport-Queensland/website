@@ -20,12 +20,20 @@ export function Logo({
           className="h-auto w-44 sm:w-48 lg:w-52"
         />
       ) : (
-        <Image
-          src={logo}
-          alt="Logo"
-          priority
-          className="h-auto w-44 sm:w-48 lg:w-52"
-        />
+        <>
+          <Image
+            src={logo}
+            alt="Logo"
+            priority
+            className="h-auto w-44 dark:hidden sm:w-48 lg:w-52"
+          />
+          <Image
+            src={logo_dark}
+            alt="Logo"
+            priority
+            className="hidden h-auto w-44 dark:block sm:w-48 lg:w-52"
+          />
+        </>
       )}
     </div>
   )

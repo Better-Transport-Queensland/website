@@ -1,6 +1,5 @@
 import { Container } from '@/components/core/container'
-import { Footer } from '@/components/footer/footer'
-import { Navbar } from '@/components/navbar/navbar'
+import { HeroBanner } from '@/components/hero-banner'
 import EmbeddedTopic, {
   generateMetadataFromTopic,
 } from '@/components/topics/embedded-topic'
@@ -8,7 +7,7 @@ import type { Metadata } from 'next'
 
 type Params = Promise<{ topicTitle: string; topicId: string }>
 const description =
-  'Explore diverse perspectives from passionate community members on the Better Transport Queensland blog. Dive into personal opinions, creative ideas, and vibrant discussions about public, active, and sustainable transport—directly from the voices that care the most!'
+  'Explore diverse perspectives from passionate community members on the Better Transport Queensland blog. Dive into personal opinions, creative ideas, and vibrant discussions about public, active, and sustainable transport, directly from the voices that care the most!'
 const categoryTitle = 'Blog'
 
 export const generateMetadata = async ({
@@ -32,10 +31,11 @@ export default async function Page({ params: Params }: { params: Params }) {
 
   return (
     <main className="overflow-hidden">
-      <Container>
-        <Navbar />
-      </Container>
-      <Container className="mb-16">
+      <HeroBanner
+        title="Blog"
+        lead="Perspectives, ideas, and discussions from our passionate community."
+      />
+      <Container className="mt-12 mb-16">
         <EmbeddedTopic
           topicTitle={topicTitle}
           topicId={topicId}
@@ -44,7 +44,6 @@ export default async function Page({ params: Params }: { params: Params }) {
           showAuthor
         />
       </Container>
-      <Footer />
     </main>
   )
 }
