@@ -35,7 +35,7 @@
     "react-dom": "^19.2.1",
     "react-use-measure": "^2.1.7",
     "rss-parser": "^3.13.0",
-    "sanity": "^4.22.0",
+    "sanity": "^6.1.0",
     "validator": "^13.15.35",
     "xml2js": "^0.6.2",
     "zod": "^4.4.3"
