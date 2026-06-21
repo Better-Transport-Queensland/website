@@ -8,6 +8,7 @@ import {
   type LayerKey,
   staticRoutes,
 } from '@/data/transport-routes'
+import { ChevronLeft, ChevronRight, Maximize2, X } from 'lucide-react'
 import maplibregl from 'maplibre-gl'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import { useTheme } from 'next-themes'
@@ -583,35 +584,9 @@ export function TransportMap({
               aria-expanded={isLayerPanelOpen}
             >
               {isLayerPanelOpen ? (
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-4 w-4"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M15 19l-7-7 7-7"
-                  />
-                </svg>
+                <ChevronLeft className="h-4 w-4" strokeWidth={2} />
               ) : (
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-4 w-4"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M9 5l7 7-7 7"
-                  />
-                </svg>
+                <ChevronRight className="h-4 w-4" strokeWidth={2} />
               )}
             </button>
           </div>
@@ -691,20 +666,7 @@ export function TransportMap({
             aria-label="Expand map"
             title="Expand map"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="text-body h-5 w-5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={2}
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M8 3H5a2 2 0 0 0-2 2v3m16-5h-3a2 2 0 0 0-2 2v3M8 21H5a2 2 0 0 1-2-2v-3m16 5h-3a2 2 0 0 1-2-2v-3"
-              />
-            </svg>
+            <Maximize2 className="text-body h-5 w-5" strokeWidth={2} />
           </button>
         )}
 
@@ -763,20 +725,7 @@ export function TransportMap({
                 className="text-muted rounded-md p-1.5 transition-colors hover:bg-(--nav-hover-bg) hover:text-(--nav-hover-text)"
                 aria-label="Close"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                </svg>
+                <X className="h-5 w-5" strokeWidth={2} />
               </button>
             </div>
             <div className="min-h-0 flex-1">

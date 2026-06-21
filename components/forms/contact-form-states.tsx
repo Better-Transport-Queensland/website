@@ -1,4 +1,5 @@
 import { AnimatePresence, motion } from 'framer-motion'
+import { Check, X } from 'lucide-react'
 import { Button } from '../core/button'
 
 export function SuccessMessage() {
@@ -38,19 +39,7 @@ export function SuccessIcon() {
   return (
     <div className="text-center">
       <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-(--badge-success-bg)">
-        <svg
-          className="h-6 w-6 text-(--badge-success-text)"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M5 13l4 4L19 7"
-          />
-        </svg>
+        <Check className="h-6 w-6 text-(--badge-success-text)" strokeWidth={2} />
       </div>
       <p className="text-sm text-(--badge-success-text) sm:text-base">
         Message sent successfully!
@@ -74,19 +63,7 @@ export function ErrorIcon({ errorMessage }: { errorMessage: string }) {
   return (
     <div className="text-center">
       <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-[var(--badge-danger-bg)]">
-        <svg
-          className="h-6 w-6 text-(--badge-danger-text)"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M6 18L18 6M6 6l12 12"
-          />
-        </svg>
+        <X className="h-6 w-6 text-(--badge-danger-text)" strokeWidth={2} />
       </div>
       <p className="max-w-xl text-sm text-(--badge-danger-text) sm:text-base">
         {errorMessage}

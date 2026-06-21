@@ -1,5 +1,6 @@
 'use client'
 
+import { ChevronLeft, ChevronRight, ExternalLink } from 'lucide-react'
 import Link from 'next/link'
 import { useCallback, useEffect, useState } from 'react'
 
@@ -94,20 +95,7 @@ export function AlertTicker({ alerts }: { alerts: TickerAlert[] }) {
                 </p>
               )}
             </div>
-            <svg
-              className="mt-1 size-4 shrink-0 text-indigo-200/50 transition group-hover:text-white"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={2}
-              stroke="currentColor"
-              aria-hidden="true"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"
-              />
-            </svg>
+            <ExternalLink className="mt-1 size-4 shrink-0 text-indigo-200/50 transition group-hover:text-white" strokeWidth={2} aria-hidden="true" />
           </div>
         </Link>
       </div>
@@ -137,9 +125,7 @@ export function AlertTicker({ alerts }: { alerts: TickerAlert[] }) {
               aria-label="Previous alert"
               className="rounded-full p-1.5 text-white/60 transition hover:bg-white/10 hover:text-white"
             >
-              <svg className="size-4" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
-              </svg>
+              <ChevronLeft className="size-4" strokeWidth={2} />
             </button>
             <span className="text-xs text-white/50">
               {index + 1} / {total}
@@ -149,9 +135,7 @@ export function AlertTicker({ alerts }: { alerts: TickerAlert[] }) {
               aria-label="Next alert"
               className="rounded-full p-1.5 text-white/60 transition hover:bg-white/10 hover:text-white"
             >
-              <svg className="size-4" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
-              </svg>
+              <ChevronRight className="size-4" strokeWidth={2} />
             </button>
           </div>
         </div>

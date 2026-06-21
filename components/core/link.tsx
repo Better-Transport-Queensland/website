@@ -1,4 +1,3 @@
-import * as Headless from '@headlessui/react'
 import NextLink, { type LinkProps } from 'next/link'
 import { forwardRef } from 'react'
 
@@ -7,12 +6,10 @@ export const Link = forwardRef(function Link(
   ref: React.ForwardedRef<HTMLAnchorElement>,
 ) {
   return (
-    <Headless.DataInteractive>
-      <NextLink
-        ref={ref}
-        {...props}
-        rel="noreferrer noopener" // Security measure
-      />
-    </Headless.DataInteractive>
+    <NextLink
+      ref={ref}
+      {...props}
+      rel="noreferrer noopener"
+    />
   )
 })

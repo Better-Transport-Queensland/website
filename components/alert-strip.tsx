@@ -1,6 +1,7 @@
 'use client'
 
 import type { AlertSeverity, TranslinkAlert } from '@/helpers/translinkAlertsHelper'
+import { ChevronLeft, ChevronRight, ExternalLink } from 'lucide-react'
 import Link from 'next/link'
 import { useCallback, useEffect, useState } from 'react'
 
@@ -51,9 +52,7 @@ export function AlertStrip({ alerts }: { alerts: TranslinkAlert[] }) {
             aria-label="Previous alert"
             className="shrink-0 rounded p-0.5 text-white/70 transition hover:text-white hover:cursor-pointer"
           >
-            <svg className="size-3.5" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
-            </svg>
+            <ChevronLeft className="size-3.5" strokeWidth={2.5} />
           </button>
         )}
 
@@ -80,16 +79,7 @@ export function AlertStrip({ alerts }: { alerts: TranslinkAlert[] }) {
           <span className="truncate text-xs font-medium text-white">
             {alert.title}
           </span>
-          <svg
-            className="size-3 shrink-0 text-white/60"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={2}
-            stroke="currentColor"
-            aria-hidden="true"
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
-          </svg>
+          <ExternalLink className="size-3 shrink-0 text-white/60" strokeWidth={2} aria-hidden="true" />
         </Link>
 
         {/* Counter + Next */}
@@ -105,9 +95,7 @@ export function AlertStrip({ alerts }: { alerts: TranslinkAlert[] }) {
               aria-label="Next alert"
               className="rounded p-0.5 text-white/70 transition hover:text-white hover:cursor-pointer"
             >
-              <svg className="size-3.5" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
-              </svg>
+              <ChevronRight className="size-3.5" strokeWidth={2.5} />
             </button>
           )}
         </div>

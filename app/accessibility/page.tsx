@@ -1,5 +1,6 @@
 import { createPageMetadata } from '@/app/layout'
 import { Card } from '@/components/core/card'
+import { Check } from 'lucide-react'
 import { Container } from '@/components/core/container'
 import { Heading, Lead, Subheading } from '@/components/core/text'
 import { HeroBanner } from '@/components/hero-banner'
@@ -551,19 +552,7 @@ function WhatWeCampaignFor() {
         <ul className="mx-auto mt-12 max-w-2xl space-y-4">
           {demands.map((d, i) => (
             <Card as="li" key={i} className="flex items-start gap-3 px-5 py-4">
-              <svg
-                className="text-accent mt-0.5 h-5 w-5 shrink-0"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={2}
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="m4.5 12.75 6 6 9-13.5"
-                />
-              </svg>
+              <Check className="text-accent mt-0.5 h-5 w-5 shrink-0" strokeWidth={2} />
               <span className="text-heading text-sm font-medium">{d}</span>
             </Card>
           ))}
