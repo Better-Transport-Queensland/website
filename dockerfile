@@ -33,6 +33,14 @@ COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
 COPY --from=builder /app/public ./public
 
+# Writable cache for the Discourse topic cache. /app is root-owned after the
+# COPY steps above, so without this chown the app silently degrades to a
+# memory-only cache that is lost on every restart.
+# Mount a volume here (-v btq-discourse-cache:/app/.cache/discourse) to keep
+# the cache warm across container replacement.
+ENV DISCOURSE_CACHE_DIR=/app/.cache/discourse
+RUN mkdir -p /app/.cache/discourse && chown -R node:node /app/.cache
+
 # Use non-root user for security
 USER node
 

@@ -153,6 +153,9 @@
   --surface-card-raised-border: var(--color-gray-200);
   --surface-subtle-bg: var(--color-gray-50);
   --surface-border: var(--color-gray-100);
+  /* Stronger than --surface-border: for rules that are content, such as a
+     thematic break inside an article, rather than incidental chrome. */
+  --surface-divider: var(--color-gray-300);
 
   /* Icon wells */
   --icon-well-bg: var(--color-indigo-50);
@@ -219,6 +222,7 @@
   --surface-card-raised-border: var(--color-gray-700);
   --surface-subtle-bg: var(--color-gray-950);
   --surface-border: var(--color-gray-800);
+  --surface-divider: var(--color-gray-600);
 
   /* Icon wells */
   --icon-well-bg: color-mix(in srgb, var(--color-indigo-900) 50%, transparent);
@@ -461,6 +465,12 @@ dialog.map-modal::backdrop {
   /* Divider borders */
   .border-subtle {
     border-color: var(--surface-border);
+    @apply transition-colors duration-200;
+  }
+
+  /* A visible divider, for thematic breaks that are part of the content. */
+  .border-divider {
+    border-color: var(--surface-divider);
     @apply transition-colors duration-200;
   }
 

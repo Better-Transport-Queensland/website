@@ -33,6 +33,9 @@ yarn-error.log*
 /public/gtfs-routes.json
 /public/gtfs-rail-stops.json
 
+# discourse topic cache (when DISCOURSE_CACHE_DIR points inside the repo)
+/.cache/
+
 # vercel
 .vercel
 
