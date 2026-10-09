@@ -17,13 +17,36 @@ export const metadata: Metadata = createPageMetadata({
   slug: 'contact',
 })
 
+const MANAGEMENT_EMAIL = 'management@btq.org.au'
+
 type CommitteeMember = {
   name: string
   role: string
   email?: string
+  vacant?: boolean
 }
 
-function CommitteeMemberCard({ name, role, email }: CommitteeMember) {
+function CommitteeMemberCard({ name, role, email, vacant }: CommitteeMember) {
+  if (vacant) {
+    return (
+      <Card className="p-6">
+        <div className="icon-well mb-3 inline-flex h-10 w-10 items-center justify-center rounded-lg text-sm font-bold">
+          ?
+        </div>
+        <h3 className="text-heading text-lg font-semibold">{role}</h3>
+        <p className="text-muted mt-1 text-sm">Vacant</p>
+        <a
+          href={`mailto:${MANAGEMENT_EMAIL}?subject=${encodeURIComponent(
+            `Expression of interest: ${role}`,
+          )}`}
+          className="link-accent mt-2 inline-block text-sm font-medium"
+        >
+          Express your interest
+        </a>
+      </Card>
+    )
+  }
+
   return (
     <Card className="p-6">
       <div className="icon-well mb-3 inline-flex h-10 w-10 items-center justify-center rounded-lg text-sm font-bold">
@@ -50,9 +73,9 @@ const committeeMembers: CommitteeMember[] = [
   { name: 'Rowan Gray', role: 'President', email: 'president@btq.org.au' },
   { name: 'Alex Jago', role: 'Secretary', email: 'secretary@btq.org.au' },
   {
-    name: 'Marc Fotsch-Heatley',
+    name: 'Vacant',
     role: 'Treasurer',
-    email: 'treasurer@btq.org.au',
+    vacant: true,
   },
   {
     name: 'Mira Alford',
@@ -60,9 +83,14 @@ const committeeMembers: CommitteeMember[] = [
     email: 'webmaster@btq.org.au',
   },
   {
-    name: 'Ari Bowe',
-    role: 'Media Director',
-    email: 'media.director@btq.org.au',
+    name: 'Vacant',
+    role: 'Social Media Director',
+    vacant: true,
+  },
+  {
+    name: 'Vacant',
+    role: 'Lead Spokesperson',
+    vacant: true,
   },
   {
     name: 'Alexander Lynch',
@@ -71,10 +99,6 @@ const committeeMembers: CommitteeMember[] = [
   {
     name: '#Metro',
     role: 'Non-Executive Director',
-  },
-  {
-    name: 'You?',
-    role: "We're always looking for additional volunteers to fill open roles!",
   },
 ]
 
@@ -87,7 +111,7 @@ function ImportantNotice() {
       <p className="mt-2 text-sm leading-relaxed">
         Better Transport Queensland Inc. is an independent community
         organisation. We are <strong>not</strong> the Queensland Government,
-        TransLink, Queensland Rail, or any local council, and we cannot process
+        Translink, Queensland Rail, or any local council, and we cannot process
         official complaints, fines, or service requests.
       </p>
       <p className="mt-2 text-sm leading-relaxed">
@@ -98,7 +122,7 @@ function ImportantNotice() {
           rel="noopener noreferrer"
           className="font-medium underline"
         >
-          TransLink directly
+          Translink directly
         </a>
         .
       </p>
@@ -167,13 +191,30 @@ function ManagementCommittee() {
         enquiries to the email addresses listed in the section above.
       </p>
 
+      <p className="text-body mt-4 max-w-3xl">
+        We currently have vacant roles on our committee. If you&apos;d like to
+        get involved, email{' '}
+        <a
+          href={`mailto:${MANAGEMENT_EMAIL}`}
+          className="link-accent font-medium"
+        >
+          {MANAGEMENT_EMAIL}
+        </a>{' '}
+        to express your interest.
+      </p>
+
       <div className="mt-12 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
         {committeeMembers.map((member) => (
           <CommitteeMemberCard
-            key={member.name}
+            key={
+              member.role === 'Non-Executive Director'
+                ? member.name
+                : member.role
+            }
             name={member.name}
             role={member.role}
             email={member.email}
+            vacant={member.vacant}
           />
         ))}
       </div>

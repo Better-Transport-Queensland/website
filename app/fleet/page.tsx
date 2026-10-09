@@ -135,7 +135,7 @@ const ferries: Vehicle[] = [
     details: [
       'Short cross-river hops connecting inner suburbs',
       'Serves routes like Holman Street to Thornton Street',
-      'Part of the TransLink integrated ticketing network',
+      'Part of the Translink integrated ticketing network',
       'Operates every 10–15 minutes during peak',
     ],
   },
@@ -408,7 +408,7 @@ export default function FleetPage() {
         <FleetSection
           label="Buses"
           title="Bus Fleet"
-          description="TransLink's bus network is the workhorse of SEQ public transport, running thousands of services daily across hundreds of routes."
+          description="Translink's bus network is the workhorse of SEQ public transport, running thousands of services daily across hundreds of routes."
           vehicles={buses}
         />
         <FleetSection
