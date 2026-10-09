@@ -3,7 +3,8 @@
 import type { TrainPosition } from '@/app/api/train-positions/route'
 import { Card } from '@/components/core/card'
 import type { TranslinkAlert } from '@/helpers/translinkAlertsHelper'
-import maplibregl from 'maplibre-gl'
+import '@/lib/maplibre-worker'
+import * as maplibregl from 'maplibre-gl'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import { useCallback, useEffect, useRef, useState } from 'react'
 

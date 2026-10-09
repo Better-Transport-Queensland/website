@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "NEXT_PUBLIC_IS_BETA=true next dev",
+    "prod": "NEXT_PUBLIC_IS_BETA=false next build && NEXT_PUBLIC_IS_BETA=false next start",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",

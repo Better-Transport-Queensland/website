@@ -8,7 +8,8 @@ import {
   type LayerKey,
   staticRoutes,
 } from '@/data/transport-routes'
-import maplibregl from 'maplibre-gl'
+import '@/lib/maplibre-worker'
+import * as maplibregl from 'maplibre-gl'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import { useTheme } from 'next-themes'
 import { useCallback, useEffect, useRef, useState } from 'react'
