@@ -457,7 +457,7 @@ function StationTracker() {
         <p className="text-muted mt-4 text-center text-xs">
           Data is indicative and based on publicly available information.
           Stations are a representative sample, not the full network. Please
-          contact TransLink for the latest accessibility information before
+          contact Translink for the latest accessibility information before
           travel.
         </p>
       </Container>

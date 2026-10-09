@@ -67,8 +67,8 @@ const timeline: TimelineEntry[] = [
   },
   {
     year: '2008',
-    title: 'TransLink Established',
-    body: 'The TransLink Transit Authority integrates ticketing and planning across bus, train, and ferry services in South East Queensland, introducing the go card.',
+    title: 'Translink Established',
+    body: 'The Translink Transit Authority integrates ticketing and planning across bus, train, and ferry services in South East Queensland, introducing the go card.',
   },
   {
     year: '2014',
