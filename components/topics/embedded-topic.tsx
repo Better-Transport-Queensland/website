@@ -3,30 +3,12 @@ import { Button } from '@/components/core/button'
 import { Heading, Lead, Subheading } from '@/components/core/text'
 import { LocalTime } from '@/components/localised/local-time'
 import { ShareSocialImage } from '@/components/topics/share-social-image'
-import { fetchPostFromCategory } from '@/helpers/discourseTopicHelper'
+import { categoryByTitle } from '@/lib/discourse/categories'
+import { getTopicArticleByCategoryTitle } from '@/lib/discourse/topics.server'
 import parse, * as parser from 'html-react-parser'
 import DOMPurify from 'isomorphic-dompurify'
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-
-/**
- * Extract the first non-emoji image URL from Discourse post HTML.
- */
-function extractFirstImageUrl(html: string): string | null {
-  const imgRegex = /<img[^>]+src=["']([^"']+)["'][^>]*>/gi
-  let match: RegExpExecArray | null
-  while ((match = imgRegex.exec(html)) !== null) {
-    const src = match[1]
-    // Skip emoji images
-    if (
-      !src.includes('/images/emoji') &&
-      !src.includes('emoji')
-    ) {
-      return src
-    }
-  }
-  return null
-}
 
 export async function generateMetadataFromTopic(
   categoryTitle: string,
@@ -35,12 +17,15 @@ export async function generateMetadataFromTopic(
   slug: string,
   description: string,
 ): Promise<Metadata> {
-  const post = await fetchPostFromCategory(topicId, categoryTitle)
+  const post = await getTopicArticleByCategoryTitle(
+    Number(topicId),
+    categoryTitle,
+  )
   const decodedTitle = decodeURIComponent(topicTitle).replace(/-/g, ' ')
-  const imageUrl = post?.content ? extractFirstImageUrl(post.content) : null
+  const imageUrl = post?.heroImageUrl ?? null
 
-  const formattedDate = post?.pubDate
-    ? new Date(post.pubDate).toLocaleDateString('en-AU', {
+  const formattedDate = post?.createdAt
+    ? new Date(post.createdAt).toLocaleDateString('en-AU', {
         day: 'numeric',
         month: 'long',
         year: 'numeric',
@@ -169,7 +154,7 @@ function renderWithTailwind(html: string) {
                   >
                     {parser.domToReact([node])}
                   </div>
-                  <figcaption className="mt-2 text-center text-sm italic text-muted">
+                  <figcaption className="text-muted mt-2 text-left text-sm italic">
                     {node.attribs.alt}
                   </figcaption>
                 </figure>
@@ -177,10 +162,20 @@ function renderWithTailwind(html: string) {
             }
 
             break
+          case 'div':
+            // Discourse attaches a lightbox metadata block to uploaded images
+            // containing the filename and intrinsic size ("1920×1441 800 KB").
+            // That is forum UI chrome; here it renders as stray text under
+            // every image, so drop it.
+            if ((node.attribs.class ?? '').split(/\s+/).includes('meta')) {
+              return <></>
+            }
+            break
           case 'hr':
-            return (
-              <hr className="my-10 border-t border-subtle" />
-            )
+            // A thematic break is content, not chrome, so it uses the
+            // higher-contrast divider token rather than --surface-border,
+            // which is nearly invisible in both themes.
+            return <hr className="border-divider my-10 border-t" />
           case 'a':
             if (
               node.children &&
@@ -232,29 +227,35 @@ export default async function EmbeddedTopic(params: {
   showAuthor?: boolean
   linkToTopic?: boolean
 }) {
-  const post = await fetchPostFromCategory(params.topicId, params.categoryTitle)
+  const post = await getTopicArticleByCategoryTitle(
+    Number(params.topicId),
+    params.categoryTitle,
+  )
 
   // Ensure proper conditional rendering
   if (!post) {
     notFound()
   }
 
-  const cleanHtml = DOMPurify.sanitize(post.content || '').replaceAll(
+  const cleanHtml = DOMPurify.sanitize(post.cookedHtml || '').replaceAll(
     /<p.*?><a.*?>Read full topic<\/a><\/p>/g,
     '', // Strip the read full topic link so we can add our own CTA
   )
 
-  const heroImageUrl = extractFirstImageUrl(post.content || '')
+  const heroImageUrl = post.heroImageUrl
 
-  const backRoute =
-    params.categoryTitle === 'Media Releases' ? '/releases' : '/blog'
+  // Announcements (/agm) has no listing route of its own, so it keeps falling
+  // back to /blog exactly as it did before.
+  const backRoute = categoryByTitle(params.categoryTitle)?.route
+    ? `/${categoryByTitle(params.categoryTitle)!.route}`
+    : '/blog'
 
   return (
     <article className="mx-auto max-w-3xl">
       {/* Back link */}
       <a
         href={backRoute}
-        className="mb-6 inline-flex items-center gap-1.5 text-sm font-medium link-accent"
+        className="link-accent mb-6 inline-flex items-center gap-1.5 text-sm font-medium"
       >
         <span aria-hidden="true">&larr;</span>
         All {params.categoryTitle === 'Media Releases' ? 'releases' : 'posts'}
@@ -262,11 +263,13 @@ export default async function EmbeddedTopic(params: {
 
       {/* Title & meta */}
       <Heading as="h1">{post.title}</Heading>
-      <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2 border-b border-subtle pb-6 text-sm text-muted">
-        {post.creator && (
+      {/* border-divider, matching the in-article <hr>: this rule separates
+          content rather than acting as incidental chrome. */}
+      <div className="border-divider text-muted mt-3 flex flex-wrap items-center gap-x-4 gap-y-2 border-b pb-6 text-sm">
+        {post.author && (
           <span>
-            {params.showAuthor ? <>@{post.creator} &middot; </> : null}
-            <LocalTime date={new Date(post.pubDate || '')} />
+            {params.showAuthor ? <>@{post.author} &middot; </> : null}
+            <LocalTime date={new Date(post.createdAt)} />
           </span>
         )}
         <ShareSocialImage
@@ -274,34 +277,42 @@ export default async function EmbeddedTopic(params: {
           topicId={params.topicId}
           category={params.categoryTitle}
           imageUrl={heroImageUrl ?? undefined}
-          date={post.pubDate ? new Date(post.pubDate).toLocaleDateString('en-AU', { day: 'numeric', month: 'long', year: 'numeric' }) : undefined}
+          date={
+            post.createdAt
+              ? new Date(post.createdAt).toLocaleDateString('en-AU', {
+                  day: 'numeric',
+                  month: 'long',
+                  year: 'numeric',
+                })
+              : undefined
+          }
         />
       </div>
 
       {/* Article body */}
-      <div className="prose-btq mt-8 text-base/7 text-prose">
+      <div className="prose-btq text-prose mt-8 text-base/7">
         {renderWithTailwind(cleanHtml)}
       </div>
 
       {/* Forum CTA */}
-      <div className="mt-12 rounded-lg bg-brand-gradient p-8 text-white sm:p-12">
+      <div className="bg-brand-gradient mt-12 rounded-lg p-8 text-white sm:p-12">
         <Subheading as="h2" dark className="text-2xl">
           {params.linkToTopic
             ? 'See what others are saying about this post!'
             : 'Join the conversation on the BTQ Forum!'}
         </Subheading>
-        <Lead className="mt-4 max-w-3xl text-on-brand">
+        <Lead className="text-on-brand mt-4 max-w-3xl">
           Stay up-to-date with the latest insights directly from the Better
           Transport Queensland (BTQ) Forum. Connect with engaged community
-          members, share your thoughts, and be part of the conversation. Everyone
-          is welcome!
+          members, share your thoughts, and be part of the conversation.
+          Everyone is welcome!
         </Lead>
         <Button
           className="mt-6 w-full sm:w-auto"
           variant="primary"
           href={
             params.linkToTopic
-              ? post.link
+              ? post.forumUrl
               : 'https://forum.bettertransportqueensland.org'
           }
         >

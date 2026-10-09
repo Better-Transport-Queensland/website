@@ -45,7 +45,7 @@ const gettingStartedSteps = [
   {
     step: '1',
     title: 'Plan Your Trip',
-    body: 'Use the TransLink Journey Planner or Google Maps to find routes, timetables, and real-time departures for your trip.',
+    body: 'Use the Translink Journey Planner or Google Maps to find routes, timetables, and real-time departures for your trip.',
   },
   {
     step: '2',
@@ -157,7 +157,7 @@ function GettingStarted() {
           Getting Started Is Easy
         </Heading>
         <Lead className="mx-auto mt-4 max-w-2xl">
-          Queensland&apos;s TransLink network covers trains, buses, ferries, and
+          Queensland&apos;s Translink network covers trains, buses, ferries, and
           light rail across South East Queensland.
         </Lead>
       </div>
@@ -181,7 +181,7 @@ function GettingStarted() {
           variant="primary"
           href="https://jp.translink.com.au/plan-your-journey/journey-planner"
         >
-          Plan a Journey on TransLink
+          Plan a Journey on Translink
         </Button>
       </div>
     </Container>

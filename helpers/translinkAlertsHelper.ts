@@ -143,9 +143,15 @@ export async function fetchTranslinkAlerts(mode: AlertMode = 'all'): Promise<Tra
   const cached = cache.get<TranslinkAlert[]>(cacheKey)
   if (cached) return cached
 
-  const parser = new Parser({ timeout: 8000 })
+  const parser = new Parser()
   try {
-    const feed = await parser.parseURL(RSS_URLS[mode])
+    // rss-parser's parseURL() calls the deprecated url.parse() internally, which
+    // Next surfaces as a DEP0169 console error. Fetch the feed ourselves and hand
+    // the parser the XML instead. no-store keeps the 5 minute NodeCache above as
+    // the single cache layer, matching parseURL's behaviour.
+    const response = await fetch(RSS_URLS[mode], { signal: AbortSignal.timeout(8000), cache: 'no-store' })
+    if (!response.ok) return []
+    const feed = await parser.parseString(await response.text())
     const alerts = (feed.items ?? []).map((item, index) => {
       const rawTitle = (item.title ?? '').trim()
       const desc = parseDescription(item.contentSnippet ?? item.content ?? '')
