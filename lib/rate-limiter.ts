@@ -109,3 +109,7 @@ export const contactFormSpamLimiter = new RateLimiter(10, 30 * 60 * 1000)
 // spam-filter probing. More lenient than the success limiter above so a
 // legitimate user can still retry after a validation error.
 export const contactFormAttemptLimiter = new RateLimiter(5, 5 * 60 * 1000)
+
+// Discourse webhook: 60 requests per minute per IP. Generous enough for a busy
+// forum's event bursts, tight enough to blunt signature-guessing floods.
+export const discourseWebhookLimiter = new RateLimiter(60, 60 * 1000)
