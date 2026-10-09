@@ -80,7 +80,6 @@ rather than `npm start`.
 | `npm start`          | Serves an existing production build.                                   |
 | `npm run lint`       | Runs `next lint`.                                                      |
 | `npm run fetch-gtfs` | Refreshes the GTFS data used by the transport maps.                    |
-| `npm run typegen`    | Regenerates Sanity schema types.                                       |
 
 ### Docker
 
