@@ -7,6 +7,7 @@ import { Heading, Lead, Subheading } from '@/components/core/text'
 import { Footer } from '@/components/footer/footer'
 import { DisableFooter } from '@/components/footer/footer-provider'
 import { Navbar } from '@/components/navbar/navbar'
+import { currentPolicyPlatform } from '@/data/policy-platform'
 import { NextEvent } from '@/data/upcoming-event'
 import type { Metadata } from 'next'
 import dynamic from 'next/dynamic'
@@ -72,13 +73,9 @@ function PolicyPlatform() {
         <div className="order-2 flex-1 lg:order-1">
           <p className="section-label">Featured</p>
           <Heading as="h2" className="mt-2">
-            The 2025 Policy Platform
+            {currentPolicyPlatform.title}
           </Heading>
-          <Lead className="mt-6 max-w-2xl">
-            Our strategic vision for a safer, more accessible, and
-            better-integrated transport system across Queensland, covering
-            public, active, and freight transport priorities.
-          </Lead>
+          <Lead className="mt-6 max-w-2xl">{currentPolicyPlatform.lead}</Lead>
           <Button className="mt-8" variant="primary" href="/policy-platform">
             Read the Platform
           </Button>
@@ -87,8 +84,8 @@ function PolicyPlatform() {
         {/* Image */}
         <div className="order-1 w-full overflow-hidden rounded-lg shadow-lg lg:order-2 lg:max-w-md">
           <Image
-            alt="2025 Policy Platform cover"
-            src="/2025_policy_platform.webp"
+            alt={`${currentPolicyPlatform.label} Policy Platform cover`}
+            src={currentPolicyPlatform.coverImage}
             width={1920}
             height={1080}
             className="block h-full w-full object-cover"
