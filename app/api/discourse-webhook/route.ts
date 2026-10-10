@@ -12,9 +12,11 @@
 
 import { CACHED_CATEGORY_IDS } from '@/lib/discourse/categories'
 import {
+  cacheStatus,
   invalidateCategory,
   invalidateTopic,
   isTopicKnown,
+  rewarmAfterInvalidation,
 } from '@/lib/discourse/topics.server'
 import { discourseWebhookLimiter } from '@/lib/rate-limiter'
 import { createHmac, timingSafeEqual } from 'crypto'
@@ -157,8 +159,28 @@ export async function POST(request: NextRequest) {
   // bookkeeping needed to narrow it down.
   await Promise.all(CACHED_CATEGORY_IDS.map((id) => invalidateCategory(id)))
 
+  // Repopulate behind the response. Safe here because the deployment is a
+  // long-lived `node server.js` process, not a serverless function that
+  // freezes once the response is sent — do not move this to an edge runtime.
+  void rewarmAfterInvalidation(topicId, CACHED_CATEGORY_IDS).catch(() => {
+    /* already logged */
+  })
+
+  // Echo what was invalidated and which process did it. Discourse's webhook
+  // event log shows this body, so a re-sent event doubles as a diagnostic:
+  // a changing `pid` across deliveries means requests are spread over several
+  // instances, and an invalidation only ever reaches the one that received it.
   return NextResponse.json(
-    { ok: true, topicId, invalidatedBody: invalidateBody },
+    {
+      ok: true,
+      event: eventName || null,
+      topicId,
+      categoryId,
+      postNumber,
+      invalidatedBody: invalidateBody,
+      invalidatedIndexes: CACHED_CATEGORY_IDS,
+      cache: cacheStatus(),
+    },
     { status: 202 },
   )
 }

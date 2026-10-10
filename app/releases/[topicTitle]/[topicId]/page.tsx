@@ -31,10 +31,7 @@ export default async function Page({ params: Params }: { params: Params }) {
 
   return (
     <main className="overflow-hidden">
-      <HeroBanner
-        title="Media Releases"
-        lead="Official statements and updates from Better Transport Queensland."
-      />
+      <HeroBanner />
       <Container className="mt-12 mb-16">
         <EmbeddedTopic
           topicTitle={topicTitle}

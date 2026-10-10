@@ -52,6 +52,33 @@ export async function getTopicArticleByCategoryTitle(
   return getTopicArticle(topicId, category.id)
 }
 
+/**
+ * Repopulate after a webhook invalidation, so the refreshed copy is already on
+ * disk before the next visitor arrives rather than making them wait for it.
+ * Fire-and-forget: the webhook must answer Discourse immediately.
+ */
+export async function rewarmAfterInvalidation(
+  topicId: number | null,
+  categoryIds: readonly number[],
+): Promise<void> {
+  for (const categoryId of categoryIds) {
+    try {
+      const topics = await readCategoryTopics(categoryId)
+      if (topicId !== null && topics.some((topic) => topic.id === topicId)) {
+        await readTopicArticle(topicId, {
+          expectCategoryId: categoryId,
+          summary: topics.find((topic) => topic.id === topicId),
+        })
+      }
+    } catch (error) {
+      console.warn(
+        `[discourse] rewarm of category ${categoryId} failed:`,
+        error,
+      )
+    }
+  }
+}
+
 /* ------------------------------------------------------------------ */
 /*  Startup prefetch                                                   */
 /* ------------------------------------------------------------------ */
@@ -75,7 +102,8 @@ async function mapWithConcurrency<T>(
  */
 export function prefetchAll(opts?: { concurrency?: number }): Promise<void> {
   if (prefetchStarted) return prefetchStarted
-  const concurrency = opts?.concurrency ?? 4
+  // Kept low: Discourse rate-limits bursts of topic reads with 503s.
+  const concurrency = opts?.concurrency ?? 2
 
   prefetchStarted = (async () => {
     for (const categoryId of CACHED_CATEGORY_IDS) {

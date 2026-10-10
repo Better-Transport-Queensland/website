@@ -14,7 +14,7 @@ export async function register() {
   // boot. The first visitor after a deploy then hits a warm cache instead of
   // paying full forum latency.
   void import('./lib/discourse/topics.server')
-    .then((topics) => topics.prefetchAll({ concurrency: 4 }))
+    .then((topics) => topics.prefetchAll({ concurrency: 2 }))
     .then(() => console.log('[discourse] cache prefetched'))
     .catch((error) =>
       console.warn('[discourse] startup prefetch failed:', error),

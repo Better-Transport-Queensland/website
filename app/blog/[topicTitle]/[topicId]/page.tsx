@@ -31,10 +31,7 @@ export default async function Page({ params: Params }: { params: Params }) {
 
   return (
     <main className="overflow-hidden">
-      <HeroBanner
-        title="Blog"
-        lead="Perspectives, ideas, and discussions from our passionate community."
-      />
+      <HeroBanner />
       <Container className="mt-12 mb-16">
         <EmbeddedTopic
           topicTitle={topicTitle}
