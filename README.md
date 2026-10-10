@@ -33,16 +33,97 @@ gitignored, so local credentials stay out of commits.
 cp .env.example .env.local
 ```
 
-| Variable                        | Purpose                                                                     |
-| ------------------------------- | --------------------------------------------------------------------------- |
-| `DISCOURSE_HOST`                | Discourse instance hostname (no `https://`). Required for the contact form. |
-| `DISCOURSE_API_KEY`             | API key from Discourse Admin > API > New API Key.                           |
-| `DISCOURSE_API_USERNAME`        | Discourse user that creates the topics.                                     |
-| `DISCOURSE_CONTACT_CATEGORY_ID` | Optional category for contact form submissions.                             |
-| `NEXT_PUBLIC_IS_BETA`           | Enables beta-only pages and components. See [Beta mode](#beta-mode).        |
+There are two kinds, and the difference matters when deploying:
 
-Without the Discourse variables the contact form section hides itself rather than
-failing, so the site still runs for local development.
+- **Build-time** — the `NEXT_PUBLIC_*` variables. Next inlines these into the bundle
+  during `next build`, so the value is fixed when the image is built and **cannot** be
+  changed by restarting the container. They must be set before the build starts, and in
+  Docker they are build args (`--build-arg`), not runtime environment variables.
+- **Runtime** — everything else. The server reads these from `process.env` while it is
+  running, so they can be supplied with `docker run -e …` or by your platform's
+  environment settings, and changing one needs only a restart, not a rebuild.
+
+| Variable                          | Read at   | Purpose                                                                                                                                                          |
+| --------------------------------- | --------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `DISCOURSE_HOST`                  | Runtime   | Discourse instance hostname (no `https://`). Used by the contact form and by the media release / blog reader. Defaults to `forum.bettertransportqueensland.org`. |
+| `DISCOURSE_API_KEY`               | Runtime   | API key from Discourse Admin > API > New API Key. Contact form only.                                                                                             |
+| `DISCOURSE_API_USERNAME`          | Runtime   | Discourse user that creates the topics. Contact form only.                                                                                                       |
+| `DISCOURSE_CONTACT_CATEGORY_ID`   | Runtime   | Optional category for contact form submissions.                                                                                                                  |
+| `DISCOURSE_WEBHOOK_SECRET`        | Runtime   | Shared secret for `/api/discourse-webhook`. The route returns 503 while unset. See [Media releases and blog](#media-releases-and-blog).                          |
+| `DISCOURSE_CACHE_DIR`             | Runtime   | Where the topic cache is written. Defaults to `<tmpdir>/btq-discourse-cache`.                                                                                    |
+| `DISCOURSE_TOPIC_MAX_AGE_SECONDS` | Runtime   | Backstop: refetch a cached article once it is this old. Default `86400` (one day) — the webhook is the normal refresh.                                           |
+| `DISCOURSE_CATEGORY_TTL_SECONDS`  | Runtime   | Backstop: how long a category listing is trusted. Default `86400` (one day).                                                                                     |
+| `DISCOURSE_PREFETCH_ON_START`     | Runtime   | Set to `false` to skip warming the topic cache at startup. Default `true`.                                                                                       |
+| `NEXT_PUBLIC_IS_BETA`             | **Build** | Enables beta-only pages and components. See [Beta mode](#beta-mode).                                                                                             |
+
+Only the contact form needs credentials. Without `DISCOURSE_API_KEY` /
+`DISCOURSE_API_USERNAME` the contact form section hides itself rather than failing, and
+the media release and blog pages keep working — they read public endpoints anonymously.
+
+## Media releases and blog
+
+These pages read Discourse's JSON API rather than its RSS feeds. The category listing
+(`/c/<path>/<id>.json`) is metadata only, so it is cheap to poll; an individual topic
+(`/t/<slug>/<id>.json`) is fetched only when its first post may have changed. Articles
+render the first post and drop replies.
+
+Topics are cached on disk with a short in-memory tier in front, under
+`$DISCOURSE_CACHE_DIR/v1/`. The on-disk record is the source of truth and the
+in-memory copy is trusted for only ten seconds, because module state is not shared
+between a route handler and a page render — so a webhook deleting a disk record takes
+effect across the app within about ten seconds rather than instantly. The cache is warmed at startup, and a fetch failure serves
+the stale copy rather than caching the failure, so a forum outage degrades to slightly
+stale content instead of 404s. If the directory is not writable the app logs one warning
+and runs memory-only.
+
+The cache is deliberately long-lived — a day for both listings and articles — because
+the **webhook** is the refresh mechanism, not polling. The two max-age settings exist
+only as a backstop for a webhook delivery that never arrived.
+
+Reads are **stale-while-revalidate**: a cached copy is returned immediately and any
+refresh runs behind the response, so a page render never waits on the forum even when
+its cache has expired. A reader can therefore see a slightly stale listing, but only if
+the webhook has stopped delivering — and the refresh it triggers lands for the next
+visitor. The webhook also repopulates what it invalidates, so nobody pays for the
+refetch. The only request that waits is one for content that has never been cached.
+
+That makes webhook health important: if deliveries stop, content can lag by up to a day.
+Discourse's webhook event log shows the response for every delivery, and the route echoes
+what it invalidated (including the serving process's `pid`) so a re-sent event doubles as
+a diagnostic — a changing `pid` across deliveries means requests are spread over several
+instances, and an invalidation only reaches the one that received it.
+
+Reads also carry a unique query parameter to defeat Discourse's **anonymous response
+cache**: it has been observed returning `x-discourse-cached: true` with a category
+listing that omitted a topic created minutes earlier. Without that bypass a stale read
+would be stored for the full day.
+
+In Docker, `DISCOURSE_CACHE_DIR` is set to `/app/.cache/discourse` and owned by the
+runtime user. Mount a volume there to keep the cache warm across container replacement:
+
+```bash
+docker run -p 3000:3000 -v btq-discourse-cache:/app/.cache/discourse btq-website
+```
+
+### Discourse webhook
+
+Set `DISCOURSE_WEBHOOK_SECRET`, then add a webhook in Discourse (Admin > API >
+Webhooks > New Webhook):
+
+| Field                 | Value                                                                                                       |
+| --------------------- | ----------------------------------------------------------------------------------------------------------- |
+| Payload URL           | `https://www.bettertransportqueensland.org/api/discourse-webhook`                                           |
+| Content Type          | `application/json`                                                                                          |
+| Secret                | `openssl rand -hex 32`, matching `DISCOURSE_WEBHOOK_SECRET`                                                 |
+| Which events          | the **Topic Event** and **Post Event** groups                                                               |
+| Categories            | leave empty — the route filters server-side, because destroy and move events do not carry a usable category |
+| Check TLS certificate | enabled                                                                                                     |
+| Active                | enabled                                                                                                     |
+
+Requests are authenticated with an HMAC-SHA256 signature over the raw body. A post event
+only refreshes an article when it is the first post; a reply refreshes the listing order
+alone. Use the admin UI's **Ping** button to confirm a `200`, and Discourse's webhook
+event log to see the response for every delivery.
 
 ## Building for production
 
@@ -91,7 +172,20 @@ docker build -t btq-website .
 docker run -p 3000:3000 btq-website
 ```
 
-Beta builds take a build arg — see below.
+The two kinds of variable are supplied differently here — build-time ones as
+`--build-arg` at image build, runtime ones as `-e` at container start:
+
+```bash
+docker build --build-arg NEXT_PUBLIC_IS_BETA=true -t btq-website:beta .
+
+docker run -p 3000:3000 \
+  -e DISCOURSE_WEBHOOK_SECRET=<secret> \
+  -v btq-discourse-cache:/app/.cache/discourse \
+  btq-website
+```
+
+Passing `NEXT_PUBLIC_IS_BETA` with `-e` has no effect: by then it has already been
+inlined into the bundle.
 
 ### Continuous deployment
 

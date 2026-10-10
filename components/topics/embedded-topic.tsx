@@ -251,7 +251,7 @@ export default async function EmbeddedTopic(params: {
     : '/blog'
 
   return (
-    <article className="mx-auto max-w-3xl">
+    <article className="mx-auto max-w-5xl">
       {/* Back link */}
       <a
         href={backRoute}

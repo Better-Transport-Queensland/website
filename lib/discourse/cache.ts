@@ -57,11 +57,18 @@ function envInt(name: string, fallback: number): number {
   return Number.isFinite(value) && value > 0 ? value : fallback
 }
 
+/**
+ * Both lifetimes default to a day. The webhook is the update mechanism; these
+ * are only the backstop for a delivery that never arrived, so they are
+ * deliberately long and the forum is polled rarely.
+ */
+const ONE_DAY_SECONDS = 86_400
 /** How long a category index is trusted before refetching. */
-const categoryTtlMs = () => envInt('DISCOURSE_CATEGORY_TTL_SECONDS', 60) * 1000
-/** The freshness guarantee: refetch a topic body once it is this old. */
+const categoryTtlMs = () =>
+  envInt('DISCOURSE_CATEGORY_TTL_SECONDS', ONE_DAY_SECONDS) * 1000
+/** The freshness backstop: refetch a topic body once it is this old. */
 const topicMaxAgeMs = () =>
-  envInt('DISCOURSE_TOPIC_MAX_AGE_SECONDS', 3600) * 1000
+  envInt('DISCOURSE_TOPIC_MAX_AGE_SECONDS', ONE_DAY_SECONDS) * 1000
 /** After a failed fetch, wait this long before trying again. */
 const STALE_RETRY_MS = 30_000
 /** Lifetime of a memory-only "this topic is gone" marker. */
@@ -155,8 +162,24 @@ async function removeRecord(file: string): Promise<void> {
 /*  Memory tier                                                        */
 /* ------------------------------------------------------------------ */
 
-const categoryMemory = new Map<number, CategoryRecord>()
-const topicMemory = new Map<number, TopicRecord>()
+/**
+ * The memory tier is only a short-lived read-through optimisation, NOT the
+ * source of truth.
+ *
+ * Module state is not shared between a route handler and a page render (and
+ * certainly not across processes), so a webhook invalidating its own Maps
+ * would never reach the renderer — the symptom being a webhook that returns
+ * 202 while the page keeps serving stale content. The on-disk record is the
+ * shared channel, so a memory entry is trusted for only MEMORY_TTL_MS before
+ * disk is consulted again; deleting a disk record therefore takes effect
+ * everywhere within that window.
+ */
+const MEMORY_TTL_MS = 10_000
+
+type Held<T> = { record: T; seenAt: number }
+
+const categoryMemory = new Map<number, Held<CategoryRecord>>()
+const topicMemory = new Map<number, Held<TopicRecord>>()
 /** Topic ids known to be deleted/unlisted, with an expiry. Never persisted. */
 const topicMissing = new Map<number, number>()
 const inflight = new Map<string, Promise<unknown>>()
@@ -200,22 +223,18 @@ async function fetchAllIndexPages(
   return topics
 }
 
-export async function getCategoryRecord(
+/** Fire-and-forget a refresh; a render must never wait on it. */
+function revalidate(promise: Promise<unknown>): void {
+  void promise.catch(() => {
+    /* already logged by the refresh itself */
+  })
+}
+
+function refreshCategory(
   categoryId: number,
+  category: DiscourseCategory,
+  stale: CategoryRecord | null,
 ): Promise<CategoryRecord | null> {
-  const category = categoryById(categoryId)
-  if (!category) return null
-
-  let record = categoryMemory.get(categoryId) ?? null
-  if (!record) {
-    await ensureDisk()
-    record = await readRecord<CategoryRecord>(categoryPath(categoryId))
-    if (record) categoryMemory.set(categoryId, record)
-  }
-
-  const fresh = record && Date.now() - record.fetchedAt < categoryTtlMs()
-  if (fresh) return record
-
   return withInflight(`category:${categoryId}`, async () => {
     try {
       const topics = await fetchAllIndexPages(category)
@@ -225,25 +244,57 @@ export async function getCategoryRecord(
         categoryId,
         topics: freezeTopics(topics),
       }
-      categoryMemory.set(categoryId, next)
+      categoryMemory.set(categoryId, { record: next, seenAt: Date.now() })
       await writeRecord(categoryPath(categoryId), next)
       return next
     } catch (error) {
       if (!(error instanceof DiscourseFetchError)) throw error
       console.warn(
-        `[discourse] category ${categoryId} index fetch failed; serving cached copy:`,
+        `[discourse] category ${categoryId} index fetch FAILED; keeping stale copy from ` +
+          (stale ? new Date(stale.fetchedAt).toISOString() : 'nothing') +
+          ':',
         error.message,
       )
-      if (!record) return null
+      if (!stale) return null
       // Back off without discarding the stale copy.
       const retried: CategoryRecord = {
-        ...record,
+        ...stale,
         fetchedAt: Date.now() - categoryTtlMs() + STALE_RETRY_MS,
       }
-      categoryMemory.set(categoryId, retried)
+      categoryMemory.set(categoryId, { record: retried, seenAt: Date.now() })
       return retried
     }
   })
+}
+
+export async function getCategoryRecord(
+  categoryId: number,
+): Promise<CategoryRecord | null> {
+  const category = categoryById(categoryId)
+  if (!category) return null
+
+  const held = categoryMemory.get(categoryId)
+  let record = held && isFresh(held.seenAt, MEMORY_TTL_MS) ? held.record : null
+  if (!record) {
+    await ensureDisk()
+    record = await readRecord<CategoryRecord>(categoryPath(categoryId))
+    if (record) categoryMemory.set(categoryId, { record, seenAt: Date.now() })
+    else categoryMemory.delete(categoryId)
+  }
+
+  if (record) {
+    // Stale-while-revalidate: serve what we have immediately and refresh
+    // behind the response. A render is never delayed by the forum, and a
+    // reader can only ever see a stale listing if the webhook has stopped
+    // delivering — the refresh then lands for the next visitor.
+    if (!isFresh(record.fetchedAt, categoryTtlMs())) {
+      revalidate(refreshCategory(categoryId, category, record))
+    }
+    return record
+  }
+
+  // Nothing cached at all, so there is nothing to render without waiting.
+  return refreshCategory(categoryId, category, null)
 }
 
 export async function getCategoryTopics(
@@ -257,33 +308,30 @@ export async function getCategoryTopics(
 /*  Topic bodies                                                       */
 /* ------------------------------------------------------------------ */
 
+/**
+ * Age-based freshness, hardened against a clock that has moved backwards or a
+ * record written by a host whose clock was ahead. A naive `now - fetchedAt`
+ * goes negative in those cases, compares as fresh, and the entry can then
+ * never refresh — so treat any future timestamp as stale.
+ */
+function isFresh(fetchedAt: number, maxAgeMs: number): boolean {
+  const age = Date.now() - fetchedAt
+  return age >= 0 && age < maxAgeMs
+}
+
 function isStale(record: TopicRecord, summary?: TopicSummary): boolean {
   // (1) The guarantee: age alone forces a refetch.
-  if (Date.now() - record.fetchedAt > topicMaxAgeMs()) return true
+  if (!isFresh(record.fetchedAt, topicMaxAgeMs())) return true
   // (2) Early trigger only. A match here must never be read as "fresh".
   if (summary && record.fingerprint !== fingerprintSummary(summary)) return true
   return false
 }
 
-async function loadTopicRecord(
+function refreshTopic(
   topicId: number,
-  summary?: TopicSummary,
+  summary: TopicSummary | undefined,
+  stale: TopicRecord | null,
 ): Promise<TopicRecord | null> {
-  const missingUntil = topicMissing.get(topicId)
-  if (missingUntil !== undefined) {
-    if (missingUntil > Date.now()) return null
-    topicMissing.delete(topicId)
-  }
-
-  let record = topicMemory.get(topicId) ?? null
-  if (!record) {
-    await ensureDisk()
-    record = await readRecord<TopicRecord>(topicPath(topicId))
-    if (record) topicMemory.set(topicId, record)
-  }
-
-  if (record && !isStale(record, summary)) return record
-
   return withInflight(`topic:${topicId}`, async () => {
     try {
       const raw = await fetchTopic(topicId, summary?.slug)
@@ -297,7 +345,7 @@ async function loadTopicRecord(
       }
 
       const article = toTopicArticle(raw)
-      if (!article) return record
+      if (!article) return stale
 
       const next: TopicRecord = {
         schema: CACHE_SCHEMA_VERSION,
@@ -313,24 +361,57 @@ async function loadTopicRecord(
         postsCount: raw.posts_count,
         article: Object.freeze(article),
       }
-      topicMemory.set(topicId, next)
+      topicMemory.set(topicId, { record: next, seenAt: Date.now() })
       await writeRecord(topicPath(topicId), next)
       return next
     } catch (error) {
       if (!(error instanceof DiscourseFetchError)) throw error
       console.warn(
-        `[discourse] topic ${topicId} fetch failed; serving cached copy:`,
+        `[discourse] topic ${topicId} fetch failed; keeping cached copy:`,
         error.message,
       )
-      if (!record) return null
+      if (!stale) return null
       const retried: TopicRecord = {
-        ...record,
+        ...stale,
         fetchedAt: Date.now() - topicMaxAgeMs() + STALE_RETRY_MS,
       }
-      topicMemory.set(topicId, retried)
+      topicMemory.set(topicId, { record: retried, seenAt: Date.now() })
       return retried
     }
   })
+}
+
+async function loadTopicRecord(
+  topicId: number,
+  summary?: TopicSummary,
+): Promise<TopicRecord | null> {
+  const missingUntil = topicMissing.get(topicId)
+  if (missingUntil !== undefined) {
+    if (missingUntil > Date.now()) return null
+    topicMissing.delete(topicId)
+  }
+
+  const held = topicMemory.get(topicId)
+  let record = held && isFresh(held.seenAt, MEMORY_TTL_MS) ? held.record : null
+  if (!record) {
+    await ensureDisk()
+    record = await readRecord<TopicRecord>(topicPath(topicId))
+    if (record) topicMemory.set(topicId, { record, seenAt: Date.now() })
+    else topicMemory.delete(topicId)
+  }
+
+  if (record) {
+    // Stale-while-revalidate, as for the category index: the cached article is
+    // returned straight away and any refresh happens behind the response, so a
+    // card or article page never waits on the forum.
+    if (isStale(record, summary)) {
+      revalidate(refreshTopic(topicId, summary, record))
+    }
+    return record
+  }
+
+  // Nothing cached, so this one has to be fetched before anything can render.
+  return refreshTopic(topicId, summary, null)
 }
 
 export async function getTopicArticle(
@@ -340,8 +421,10 @@ export async function getTopicArticle(
   let summary = opts?.summary
   if (!summary && opts?.expectCategoryId !== undefined) {
     // Pick up the slug and fingerprint from the index when it is already cached.
-    const record = categoryMemory.get(opts.expectCategoryId)
-    summary = record?.topics.find((topic) => topic.id === topicId)
+    const held = categoryMemory.get(opts.expectCategoryId)
+    summary = held?.record.topics.find(
+      (topic: TopicSummary) => topic.id === topicId,
+    )
   }
 
   const record = await loadTopicRecord(topicId, summary)
@@ -390,5 +473,16 @@ export function cacheStatus() {
     diskEnabled,
     categories: categoryMemory.size,
     topics: topicMemory.size,
+    // pid/uptime identify the serving process: if successive webhook
+    // deliveries report different pids, requests are being spread across
+    // instances and an invalidation only reaches one of them.
+    pid: process.pid,
+    uptimeSeconds: Math.round(process.uptime()),
+    indexFetchedAt: Object.fromEntries(
+      [...categoryMemory.entries()].map(([id, held]) => [
+        id,
+        new Date(held.record.fetchedAt).toISOString(),
+      ]),
+    ),
   }
 }
