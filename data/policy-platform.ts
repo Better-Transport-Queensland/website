@@ -20,7 +20,8 @@ export type PolicyPlatformEdition = {
  * current edition and is what /policy-platform and the homepage feature show;
  * every other entry is reachable at /policy-platform/<slug>.
  *
- * PDFs live in /public/policy-platform. To publish a new edition, add its
+ * PDFs and cover images live in /public/policy-platform, named
+ * btq-policy-platform-<version>.pdf/.webp. To publish a new edition, add its
  * entry to the top of this list.
  */
 export const policyPlatformEditions: PolicyPlatformEdition[] = [
@@ -30,7 +31,7 @@ export const policyPlatformEditions: PolicyPlatformEdition[] = [
     title: 'The 26/27 Policy Platform',
     pdfUrl: '/policy-platform/btq-policy-platform-2026.1.pdf',
     pdfSize: 'PDF · 2.0 MB',
-    coverImage: '/2026-27_policy_platform.webp',
+    coverImage: '/policy-platform/btq-policy-platform-2026.1.webp',
     lead: 'Our principles, vision, objectives and actions for a frequent, connected, and easy-to-use transport system across Queensland. Evidence-based, mode-neutral, and endorsed by our members.',
   },
   {
@@ -39,7 +40,7 @@ export const policyPlatformEditions: PolicyPlatformEdition[] = [
     title: 'The 2025 Policy Platform',
     pdfUrl: '/policy-platform/btq-policy-platform-2025.2.pdf',
     pdfSize: 'PDF · 1.3 MB',
-    coverImage: '/2025_policy_platform.webp',
+    coverImage: '/policy-platform/btq-policy-platform-2025.2.webp',
     lead: 'Our strategic vision for a safer, more accessible, and better-integrated transport system across Queensland, grounded in evidence and shaped by community input.',
   },
 ]

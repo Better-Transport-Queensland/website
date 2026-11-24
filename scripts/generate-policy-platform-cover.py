@@ -4,7 +4,8 @@ Generate the homepage cover image for a Policy Platform edition.
 Renders the PDF's cover page in the centre with a fan of inner pages either
 side (each step out is smaller and more rotated), over a photo background with
 a subtle brand-gradient overlay. Output is a 1920x1080 WebP for
-`coverImage` in data/policy-platform.ts.
+`coverImage` in data/policy-platform.ts. Save it next to the PDF with the same
+name, e.g. btq-policy-platform-2026.1.pdf -> btq-policy-platform-2026.1.webp.
 
 Requirements (Python 3.10+):
     pip install pymupdf pillow numpy
@@ -12,8 +13,12 @@ Requirements (Python 3.10+):
 Usage:
     python scripts/generate-policy-platform-cover.py \
         public/policy-platform/btq-policy-platform-2026.1.pdf \
-        public/2026-27_policy_platform.webp \
+        public/policy-platform/btq-policy-platform-2026.1.webp \
+        --background scripts/2024-09-16-AirportTrain.jpg \
         --pages 22,5,21,34
+
+`--background` is required. Any photo works, as it is cover-cropped to 16:9;
+use one at least 1920x1080 so the result stays sharp.
 
 `--pages` lists the inner pages (0-based PDF page indexes) left to right,
 excluding the cover; half go left of the cover and half go right. Pick pages
@@ -27,8 +32,6 @@ from pathlib import Path
 import numpy as np
 import pymupdf
 from PIL import Image, ImageFilter
-
-ROOT = Path(__file__).resolve().parent.parent
 
 WIDTH, HEIGHT = 1920, 1080
 SUPERSAMPLE = 2  # pages are composited at 2x then downscaled for clean edges
@@ -219,8 +222,8 @@ def main() -> None:
     parser.add_argument(
         '--background',
         type=Path,
-        default=ROOT / 'public' / '2024-09-16-AirportTrain.jpg',
-        help='Background photo (default: public/2024-09-16-AirportTrain.jpg)',
+        required=True,
+        help='Background photo, cover-cropped to 16:9 (ideally at least 1920x1080)',
     )
     parser.add_argument('--cover-height', type=int, default=736, help='Cover height in px; other pages scale with it (default: 736)')
     parser.add_argument('--step-angle', type=float, default=9, help='Extra rotation per step out, degrees (default: 9)')
@@ -229,6 +232,10 @@ def main() -> None:
     parser.add_argument('--blur', type=float, default=0, help='Background blur radius (default: 0)')
     parser.add_argument('--overlay', type=float, default=0.45, help='Gradient overlay opacity 0-1 (default: 0.45)')
     args = parser.parse_args()
+
+    for path, what in ((args.pdf, 'PDF'), (args.background, 'background image')):
+        if not path.is_file():
+            parser.error(f'{what} not found: {path}')
 
     inner = [int(p) for p in args.pages.split(',') if p.strip()]
     doc = pymupdf.open(args.pdf)
