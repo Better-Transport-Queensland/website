@@ -5,6 +5,61 @@ import { DisableFooter } from '@/components/footer/footer-provider'
 import { HeroBanner } from '@/components/hero-banner'
 import type { PolicyPlatformEdition } from '@/data/policy-platform'
 import { pastPolicyPlatforms } from '@/data/policy-platform'
+import { ArrowRight, Download, Info } from 'lucide-react'
+import Image from 'next/image'
+import Link from 'next/link'
+
+function PreviousEditionCard({ edition }: { edition: PolicyPlatformEdition }) {
+  const href = `/policy-platform/${edition.slug}`
+
+  return (
+    <li className="surface-card flex flex-col overflow-hidden hover:shadow-md">
+      <Link
+        href={href}
+        className="border-subtle relative block aspect-[16/9] border-b"
+        aria-label={`View the ${edition.label} Policy Platform`}
+        tabIndex={-1}
+      >
+        <Image
+          alt=""
+          src={edition.coverImage}
+          fill
+          sizes="(min-width: 1024px) 400px, (min-width: 640px) 50vw, 100vw"
+          className="object-cover"
+        />
+      </Link>
+      <div className="flex grow flex-col p-5">
+        <p className="text-muted text-xs font-semibold tracking-wider uppercase">
+          Archived edition
+        </p>
+        <h3 className="heading-3 mt-1">{edition.label} Policy Platform</h3>
+        <p className="text-muted mt-1 text-sm">{edition.pdfSize}</p>
+        <div className="mt-auto flex flex-wrap gap-3 pt-5">
+          <Button
+            href={href}
+            variant="primary"
+            size="small"
+            className="gap-1.5"
+          >
+            View edition
+            <ArrowRight className="h-4 w-4" aria-hidden />
+          </Button>
+          <Button
+            href={edition.pdfUrl}
+            variant="outline"
+            size="small"
+            className="gap-1.5"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <Download className="h-4 w-4" aria-hidden />
+            Download PDF
+          </Button>
+        </div>
+      </div>
+    </li>
+  )
+}
 
 function PreviousEditions() {
   if (pastPolicyPlatforms.length === 0) {
@@ -13,19 +68,17 @@ function PreviousEditions() {
 
   return (
     <Container className="py-16">
-      <h2 className="text-heading text-2xl font-bold tracking-tight">
+      <p className="section-label">Archive</p>
+      <h2 className="text-heading mt-2 text-2xl font-bold tracking-tight">
         Previous editions
       </h2>
       <p className="text-body mt-3 max-w-xl text-base">
-        Superseded platforms remain available for reference.
+        Superseded platforms remain available for reference, so you can see how
+        our positions have developed over time.
       </p>
-      <ul className="mt-8 flex flex-wrap gap-4">
+      <ul className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {pastPolicyPlatforms.map((edition) => (
-          <li key={edition.slug}>
-            <Button href={`/policy-platform/${edition.slug}`} variant="outline">
-              {edition.label} Policy Platform
-            </Button>
-          </li>
+          <PreviousEditionCard key={edition.slug} edition={edition} />
         ))}
       </ul>
     </Container>
@@ -66,23 +119,25 @@ export function PolicyPlatformEditionPage({
         </HeroBanner>
 
         <div className="grow">
-          {archived && (
-            <Container className="pt-12">
-              <div className="rounded-xl border border-amber-300 bg-amber-50 p-4 text-amber-900 dark:border-amber-700/70 dark:bg-amber-950/30 dark:text-amber-200">
-                <p className="text-sm leading-relaxed">
-                  This is an archived edition. Read our{' '}
-                  <a href="/policy-platform" className="font-medium underline">
-                    current policy platform
-                  </a>{' '}
-                  for Better Transport Queensland&apos;s latest positions.
-                </p>
-              </div>
-            </Container>
-          )}
-
           {/* PDF embed section */}
           <div className="border-t border-gray-200 bg-gray-50/50 dark:border-gray-800 dark:bg-gray-900/50">
             <Container className="py-16">
+              {archived && (
+                <div className="mx-auto mb-12 flex max-w-[840px] items-start gap-3 rounded-xl border border-amber-300 bg-amber-50 p-4 text-amber-900 dark:border-amber-700/70 dark:bg-amber-950/30 dark:text-amber-200">
+                  <Info className="mt-0.5 h-5 w-5 shrink-0" aria-hidden />
+                  <p className="text-sm leading-relaxed">
+                    This is an archived edition. Read our{' '}
+                    <Link
+                      href="/policy-platform"
+                      className="font-medium underline"
+                    >
+                      current policy platform
+                    </Link>{' '}
+                    for Better Transport Queensland&apos;s latest positions.
+                  </p>
+                </div>
+              )}
+
               <div className="text-center">
                 <h2 className="text-heading text-2xl font-bold tracking-tight">
                   Read the Document
@@ -94,7 +149,7 @@ export function PolicyPlatformEditionPage({
               </div>
 
               <div className="mt-10 hidden justify-center lg:flex">
-                <div className="border-subtle bg-page relative aspect-[1/1.414] w-full max-w-[840px] overflow-hidden rounded-lg border shadow-sm">
+                <div className="border-subtle bg-page relative aspect-[1/1.414] max-h-[calc(100dvh-4rem)] w-full max-w-[840px] overflow-hidden rounded-lg border shadow-sm">
                   <iframe
                     src={edition.pdfUrl}
                     className="absolute inset-0 h-full w-full border-none"
