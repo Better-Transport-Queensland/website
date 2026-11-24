@@ -8,6 +8,7 @@ import {
   type LayerKey,
   staticRoutes,
 } from '@/data/transport-routes'
+import type * as GeoJSON from 'geojson'
 import { ChevronLeft, ChevronRight, Maximize2, X } from 'lucide-react'
 import '@/lib/maplibre-worker'
 import * as maplibregl from 'maplibre-gl'
